@@ -16,7 +16,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare id: string
 
   @column()
-  declare fristName: string
+  declare firstName: string
 
   @column()
   declare lastName: string
@@ -28,7 +28,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare password: string
 
   @column()
-  declare type: 'user' | 'practitioner' | 'practitioner_staff'
+  declare type: UserType
 
   @column()
   declare isActive: boolean
@@ -45,4 +45,10 @@ export default class User extends compose(BaseModel, AuthFinder) {
   public static assignUuid(user: User) {
     user.id = randomUUID()
   }
+}
+
+export enum UserType {
+  'user',
+  'practitioner',
+  'staff',
 }
