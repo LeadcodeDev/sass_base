@@ -51,7 +51,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
 }
 
 export enum UserType {
-  'user',
-  'practitioner',
-  'staff',
+  user,
+  practitioner,
+  staff,
 }
