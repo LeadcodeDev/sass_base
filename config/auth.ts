@@ -17,7 +17,7 @@ const authConfig = defineConfig({
 export default authConfig
 
 /**
- * Inferring types from the configured auth
+ * Inferring types.ts from the configured auth
  * guards.
  */
 declare module '@adonisjs/auth/types' {
