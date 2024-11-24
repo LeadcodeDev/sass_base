@@ -51,6 +51,7 @@ export default defineConfig({
   preloads: [
     () => import('#start/routes'),
     () => import('#app/users/routes'),
+    () => import('#app/bouncer/routes'),
     () => import('#start/kernel'),
   ],
 
