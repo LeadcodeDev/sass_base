@@ -1,4 +1,5 @@
 import { BaseSchema } from '@adonisjs/lucid/schema'
+import { UserType } from '#models/user'
 
 export default class extends BaseSchema {
   protected tableName = 'users'
@@ -11,7 +12,7 @@ export default class extends BaseSchema {
       table.string('lastname').notNullable()
       table.string('email', 254).notNullable().unique()
       table.string('password').notNullable()
-      table.enum('type', ['user', 'practitioner', 'staff']).notNullable().defaultTo('user')
+      table.enum('type', Object.keys(UserType)).notNullable().defaultTo('user')
       table.boolean('is_active').notNullable().defaultTo(true)
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()
