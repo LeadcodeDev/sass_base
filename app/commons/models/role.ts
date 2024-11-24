@@ -14,6 +14,9 @@ export default class Role extends BaseModel {
   @column()
   declare description: string
 
+  @column()
+  declare forAdmin: boolean
+
   @manyToMany(() => Permission)
   declare permissions: ManyToMany<typeof Permission>
 
