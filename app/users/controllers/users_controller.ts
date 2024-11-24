@@ -5,7 +5,7 @@ import User from '#models/user'
 export default class UsersController {
   async index({ inertia, request }: HttpContext) {
     const page = request.input('page', 1)
-    const limit = 20
+    const limit = request.input('limit', 20)
 
     const users = await User.query().paginate(page, limit)
     //todo: Modifying the route path
@@ -24,35 +24,22 @@ export default class UsersController {
     return response.redirect().toRoute('users.index')
   }
 
-  async show({ inertia, response, session, params }: HttpContext) {
-    const user = await User.query().where('uid', params.uid).first()
-
-    if (!user) {
-      session.flash('error', 'Aucun utilisateur trouvé.')
-      return response.redirect().back()
-    }
+  async show({ inertia, params }: HttpContext) {
+    const user = await User.query().where('uid', params.uid).firstOrFail()
     //todo: Modifying the route path
     return inertia.render('users/show', { user })
   }
 
-  async update({ request, response, session, params }: HttpContext) {
+  async update({ request, response, params }: HttpContext) {
     const data = await request.validateUsing(updateUserValidator)
-    const user = await User.findBy('uid', params.uid)
-    if (!user) {
-      session.flash('error', 'Aucun utilisateur trouvé.')
-      return response.redirect().back()
-    }
+    const user = await User.findByOrFail('uid', params.uid)
 
     await user.merge(data).save()
     return response.redirect().toRoute('users.index')
   }
 
-  async delete({ response, session, params }: HttpContext) {
-    const user = await User.findBy('uid', params.uid)
-    if (!user) {
-      session.flash('error', 'Aucun utilisateur trouvé.')
-      return response.redirect().back()
-    }
+  async delete({ response, params }: HttpContext) {
+    const user = await User.findByOrFail('uid', params.uid)
 
     await user.delete()
     return response.redirect().toRoute('users.index')
