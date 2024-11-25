@@ -42,6 +42,7 @@ export default await Env.create(new URL('../', import.meta.url), {
   |----------------------------------------------------------
   */
   DRIVE_DISK: Env.schema.enum(['r2'] as const),
+  R2_CDN: Env.schema.string(),
   R2_KEY: Env.schema.string(),
   R2_SECRET: Env.schema.string(),
   R2_BUCKET: Env.schema.string(),

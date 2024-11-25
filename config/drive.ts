@@ -14,6 +14,7 @@ const driveConfig = defineConfig({
         accessKeyId: env.get('R2_KEY'),
         secretAccessKey: env.get('R2_SECRET'),
       },
+      cdnUrl: env.get('R2_CDN'),
       region: 'auto',
       bucket: env.get('R2_BUCKET'),
       endpoint: env.get('R2_ENDPOINT'),
