@@ -19,9 +19,10 @@ import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import SelectBox from '@/components/ui/select'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import User from '#models/user'
 
 type Props = {
-  state: State<unknown | null>
+  state: State<User | null>
 }
 
 export default function SidebarUserDetail(props: Props) {
@@ -92,7 +93,7 @@ export default function SidebarUserDetail(props: Props) {
                     <FormItem>
                       <FormLabel>Firstname</FormLabel>
                       <FormControl>
-                        <Input placeholder="Doe" {...field} />
+                        <Input  placeholder="Doe" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

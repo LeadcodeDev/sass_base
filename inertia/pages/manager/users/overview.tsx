@@ -11,18 +11,16 @@ import { Badge } from '@/components/ui/badge'
 import { useState } from 'react'
 import SidebarUserDetail from '@/pages/manager/users/components/sidebar_user_detail'
 
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination"
-import { Link } from '@inertiajs/react'
+import User from '#models/user'
+import { Paginator } from '@/commons/types'
+import { Searchbar } from '@/components/commons/searchbar'
 
-export default function UsersOverview() {
-  const [selectedUser, setSelectedUser] = useState<unknown | null>(null)
+type Props = {
+  users: Paginator<User>
+}
+
+export default function UsersOverview(props: Props) {
+  const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
   return (
     <ManagerLayout
@@ -30,8 +28,15 @@ export default function UsersOverview() {
         { label: 'Manager', url: '/manager' },
         { label: 'Users overview', url: '/manager/users' },
       ]}
+      header={
+        <Searchbar
+          placeholder="Search for a user..."
+          searchKey="search"
+          redirect="/manager/users/overview"
+        />
+      }
     >
-      <Table>
+      <Table meta={props.users.meta}>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">ID</TableHead>
@@ -40,37 +45,23 @@ export default function UsersOverview() {
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
-          {Array.from({ length: 20 }).map((_, index) => (
-            <TableRow onClick={() => setSelectedUser('user')} key={index}>
-              <TableCell className="font-medium">INV001</TableCell>
-              <TableCell>John doe</TableCell>
+        <TableBody
+          data={props.users.data}
+          builder={(user) => (
+            <TableRow onClick={() => setSelectedUser(user)} key={user.id}>
+              <TableCell className="font-medium">{user.uid}</TableCell>
+              <TableCell>
+                {user.firstname} {user.lastname}
+              </TableCell>
               <TableCell className="flex items-center gap-x-2">
-                <Badge variant="outline">Utilisateur</Badge>
-                {index == 2 && <Badge variant="destructive">Désactivé</Badge>}
+                <Badge variant="outline">{user.type}</Badge>
+                {!user.isActive && <Badge variant="destructive">Deactivate</Badge>}
               </TableCell>
               <TableCell className="text-right">Actions</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
+          )}
+        />
       </Table>
-
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious href="" />
-          </PaginationItem>
-          <PaginationItem>
-            <Link href="#">1</Link>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href="" />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
 
       <SidebarUserDetail state={[selectedUser, setSelectedUser]} />
     </ManagerLayout>

@@ -11,6 +11,9 @@ dependencies:
   '@adonisjs/auth':
     specifier: ^9.2.3
     version: 9.2.4(@adonisjs/assembler@7.8.2)(@adonisjs/core@6.14.1)(@adonisjs/lucid@21.4.0)(@adonisjs/session@7.5.0)(@japa/plugin-adonisjs@3.0.1)
+  '@adonisjs/bouncer':
+    specifier: ^3.1.4
+    version: 3.1.4(@adonisjs/core@6.14.1)(edge.js@6.2.0)
   '@adonisjs/core':
     specifier: ^6.14.1
     version: 6.14.1(@adonisjs/assembler@7.8.2)(@vinejs/vine@2.1.0)(edge.js@6.2.0)(pino-pretty@11.3.0)
@@ -289,6 +292,26 @@ packages:
       media-typer: 1.1.0
       qs: 6.13.1
       raw-body: 2.5.2
+
+  /@adonisjs/bouncer@3.1.4(@adonisjs/core@6.14.1)(edge.js@6.2.0):
+    resolution: {integrity: sha512-31mERb/pVUIGod0Jh0Ubraemh8r2Psu3+W1A5us3FqGo9WXS5UmJU7jliQgrCoav54NAs5moEFY1KkLsW5z7lw==}
+    engines: {node: '>=18.16.0'}
+    peerDependencies:
+      '@adonisjs/core': ^6.2.0
+      '@adonisjs/i18n': ^2.0.0
+      edge.js: ^6.0.2
+    peerDependenciesMeta:
+      '@adonisjs/core':
+        optional: true
+      '@adonisjs/i18n':
+        optional: true
+      edge.js:
+        optional: true
+    dependencies:
+      '@adonisjs/core': 6.14.1(@adonisjs/assembler@7.8.2)(@vinejs/vine@2.1.0)(edge.js@6.2.0)(pino-pretty@11.3.0)
+      '@poppinss/utils': 6.8.3
+      edge.js: 6.2.0
+    dev: false
 
   /@adonisjs/config@5.0.2:
     resolution: {integrity: sha512-NXjFqDHNGRTZ1EnA4zr20GFEt7qw/JvZ4ZV8/PzFyVc7dPoFprpoyE3bw7kmlKHhcQdBbF7YXCGB4q+HQUnqiQ==}

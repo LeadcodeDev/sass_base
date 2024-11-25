@@ -21,6 +21,8 @@ type Props = {
   defaultValue?: string | number
   expanded?: boolean
   multiple?: boolean
+  searchable?: boolean
+  onChange?: (value: string | number) => void
 }
 
 export function Combobox(props: Props) {
@@ -46,7 +48,9 @@ export function Combobox(props: Props) {
       </PopoverTrigger>
       <PopoverContent align="start"  className={cn('p-0', props.expanded ? 'w-full' : 'w-[200px]')}>
         <Command>
-          <CommandInput placeholder={props.searchPlaceholder ?? 'Search an element'} className="h-9" />
+          {props.searchable && (
+            <CommandInput placeholder={props.searchPlaceholder ?? 'Search an element'} className="h-9" />
+          )}
           <CommandList>
             <CommandEmpty>{props.notFoundPlaceholder ?? `No element found.`}</CommandEmpty>
             <CommandGroup>
@@ -56,6 +60,7 @@ export function Combobox(props: Props) {
                   value={element.value}
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? '' : currentValue)
+                    props.onChange?.(currentValue)
                     setOpen(false)
                   }}
                 >

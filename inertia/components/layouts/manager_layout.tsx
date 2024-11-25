@@ -1,4 +1,4 @@
-import { ComponentProps, Fragment, PropsWithChildren } from 'react'
+import { ComponentProps, Fragment, PropsWithChildren, ReactNode } from 'react'
 import {
   Sidebar,
   SidebarContent,
@@ -47,6 +47,7 @@ const links = [
 
 type Props = {
   breadcrumb?: { label: string; url?: string }[]
+  header?: ReactNode
 }
 
 export function ManagerLayout(props: PropsWithChildren<Props>) {
@@ -82,6 +83,12 @@ export function ManagerLayout(props: PropsWithChildren<Props>) {
                 </BreadcrumbList>
               </Breadcrumb>
             </Fragment>
+          )}
+
+          {props.header && (
+            <div className="flex-1 items-center w-full">
+              {props.header}
+            </div>
           )}
         </header>
         {props.children}
