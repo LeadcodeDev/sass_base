@@ -22,6 +22,7 @@ import User from '#models/user'
 import { Button } from '@/components/ui/button'
 import { router } from '@inertiajs/react'
 import { Switch } from '@/components/ui/switch'
+import { DeleteButton } from '@/components/commons/delete_button'
 
 type Props = {
   state: State<User | null>
@@ -226,9 +227,23 @@ export default function SidebarUserDetail(props: Props) {
                   />
                 </div>
 
-                <Button type="submit" className="mt-5">
-                  Save
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button type="submit" size="sm" className="mt-5">
+                    Save
+                  </Button>
+                  <DeleteButton
+                    word="confirmation"
+                    onSubmit={() => {
+                      router.delete(`/manager/users/${selectedUser?.uid}`)
+                      setSelectedUser(null)
+                    }}
+                    variant="destructive"
+                    size="sm"
+                    className="mt-5"
+                  >
+                    Supprimer
+                  </DeleteButton>
+                </div>
               </form>
             </Form>
           </div>

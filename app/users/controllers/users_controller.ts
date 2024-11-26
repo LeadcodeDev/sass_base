@@ -45,6 +45,6 @@ export default class UsersController {
     const user = await User.findByOrFail('uid', params.uid)
 
     await user.delete()
-    return response.redirect().toRoute('users.index')
+    return response.redirect().toRoute('manager.users.index')
   }
 }
