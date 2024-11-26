@@ -34,11 +34,11 @@ export default class UsersController {
   }
 
   async update({ request, response, params }: HttpContext) {
-    const data = await request.validateUsing(updateUserValidator)
+    const data = await request.validateUsing(updateUserValidator(params.uid))
     const user = await User.findByOrFail('uid', params.uid)
 
     await user.merge(data).save()
-    return response.redirect().toRoute('users.index')
+    return response.redirect().toRoute('manager.users.index')
   }
 
   async delete({ response, params }: HttpContext) {

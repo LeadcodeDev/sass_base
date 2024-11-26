@@ -129,7 +129,7 @@ const SelectBox = forwardRef<HTMLInputElement, SelectBoxProps>((props, ref) => {
         <Command>
           <div className="relative">
             <CommandInput
-              defaultValue={searchTerm}
+              value={searchTerm}
               onValueChange={(e) => setSearchTerm(e)}
               ref={ref}
               placeholder={props.inputPlaceholder ?? 'Search...'}

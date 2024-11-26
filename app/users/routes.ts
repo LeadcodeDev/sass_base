@@ -8,7 +8,7 @@ router
         router.get('overview', [UsersController, 'index']).as('index')
         router.get('create', [UsersController, 'create']).as('create')
         router.post('', [UsersController, 'store']).as('store')
-        router.get(':id', [UsersController, 'show']).as('show')
+        router.get(':uid', [UsersController, 'show']).as('show')
         router.put(':uid', [UsersController, 'update']).as('update')
         router.delete(':uid', [UsersController, 'delete']).as('delete')
       })

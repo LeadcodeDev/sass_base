@@ -18,20 +18,25 @@ export const createUserValidator = vine.compile(
   })
 )
 
-export const updateUserValidator = vine.compile(
-  vine.object({
-    firstname: vine.string().trim().minLength(3).optional(),
-    lastname: vine.string().trim().minLength(3).optional(),
-    email: vine
-      .string()
-      .email()
-      .unique(async (db, value) => {
-        const match = await db.from('users').select('id').where('email', value).first()
-        return !match
-      })
-      .optional(),
-    password: vine.string().trim().minLength(3).optional(),
-    type: vine.enum(UserType).optional(),
-    is_active: vine.boolean().optional(),
-  })
-)
+export const updateUserValidator = (uid: string) =>
+  vine.compile(
+    vine.object({
+      firstname: vine.string().trim().minLength(3).optional(),
+      lastname: vine.string().trim().minLength(3).optional(),
+      email: vine
+        .string()
+        .email()
+        .unique(async (db, value) => {
+          const match = await db
+            .from('users')
+            .select('id')
+            .where('email', value)
+            .andWhereNot('uid', uid)
+            .first()
+          return !match
+        })
+        .optional(),
+      type: vine.enum(UserType).optional(),
+      isActive: vine.boolean().optional(),
+    })
+  )
