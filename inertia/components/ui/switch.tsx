@@ -5,9 +5,9 @@ import { cn } from '@/commons/utils'
 const Switch = React.forwardRef<
   React.ElementRef<typeof SwitchPrimitives.Root>,
   Omit<React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>, 'value'> & {
-    label?: (checked: boolean) => string
+    labelBuilder?: (checked: boolean) => string
   }
->(({ className, ...props }, ref) => {
+>(({ className, labelBuilder, ...props }, ref) => {
   return (
     <div className="flex items-center gap-2">
       <SwitchPrimitives.Root
@@ -25,10 +25,10 @@ const Switch = React.forwardRef<
         />
       </SwitchPrimitives.Root>
 
-      {props.label && (
-        <label className="text-sm font-medium text-muted-foreground mr-2" htmlFor={props.id}>
-          {props.label(props.checked ?? false)}
-        </label>
+      {labelBuilder && (
+        <p className="text-sm font-medium text-muted-foreground mr-2">
+          {labelBuilder(props.checked ?? false)}
+        </p>
       )}
     </div>
   )

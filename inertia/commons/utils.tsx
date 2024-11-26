@@ -1,4 +1,5 @@
 import { router } from '@inertiajs/react'
+import { ExternalToast } from 'sonner'
 
 export function cn(...classes: (string | undefined | null | false)[]): string {
   return classes.filter(Boolean).join(' ')
@@ -36,4 +37,30 @@ export function handleSearchByKey(
   }
 
   router.get(route, payload, { preserveState: true })
+}
+
+enum ToastVariant {
+  error= 'error',
+  success= 'success',
+}
+
+const baseVariant: ExternalToast = {
+  closeButton: true,
+  unstyled: true,
+  classNames: {
+    toast: 'w-[356px] p-4 rounded flex gap-2 border border-input !shadow-sm',
+    title: 'flex items-center -mt-0.5 text-sm font-semibold',
+    content: '!text-sm',
+    success: '!text-green-600 !bg-green-50',
+    error: '!text-red-600 !bg-red-50',
+    warning: '!text-yellow-600 !bg-yellow-50',
+    info: '!text-blue-600 !bg-blue-50',
+    description: 'font-medium',
+    closeButton: 'bg-white border border-input',
+  },
+}
+
+export const toastVariant: { [key in ToastVariant]: ExternalToast } = {
+  error: baseVariant,
+  success: baseVariant
 }

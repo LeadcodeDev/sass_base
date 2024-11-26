@@ -23,6 +23,8 @@ import { Button } from '@/components/ui/button'
 import { router } from '@inertiajs/react'
 import { Switch } from '@/components/ui/switch'
 import { DeleteButton } from '@/components/commons/delete_button'
+import { toast } from 'sonner'
+import { toastVariant } from '@/commons/utils'
 
 type Props = {
   state: State<User | null>
@@ -43,7 +45,33 @@ export default function SidebarUserDetail(props: Props) {
   })
 
   function handleSubmit(data: { [key: string]: any }) {
-    router.put(`/manager/users/${selectedUser?.uid}`, data)
+    router.put(`/manager/users/${selectedUser?.uid}`, data, {
+      onSuccess: () => {
+        setSelectedUser(null)
+        toast.success('Success', {
+          ...toastVariant.success,
+          description: 'User has been updated.',
+        })
+      },
+      onError: () => {
+        toast.error('Error', {
+          ...toastVariant.error,
+          description: 'An error occurred while updating the user.',
+        })
+      }
+    })
+  }
+
+  function handleDelete() {
+    router.delete(`/manager/users/${selectedUser?.uid}`, {
+      onSuccess: () => {
+        setSelectedUser(null)
+        toast.success('Success', {
+          ...toastVariant.success,
+          description: 'User has been deleted.',
+        })
+      },
+    })
   }
 
   const firstname = form.watch('firstname')
@@ -146,7 +174,7 @@ export default function SidebarUserDetail(props: Props) {
                         <FormLabel>Email</FormLabel>
                         <FormControl>
                           <Switch
-                            label={(checked) => (checked ? 'Active' : 'Inactive')}
+                            labelBuilder={(checked) => (checked ? 'Active' : 'Inactive')}
                             checked={field.value}
                             onCheckedChange={field.onChange}
                             {...field}
@@ -233,10 +261,7 @@ export default function SidebarUserDetail(props: Props) {
                   </Button>
                   <DeleteButton
                     word="confirmation"
-                    onSubmit={() => {
-                      router.delete(`/manager/users/${selectedUser?.uid}`)
-                      setSelectedUser(null)
-                    }}
+                    onSubmit={handleDelete}
                     variant="destructive"
                     size="sm"
                     className="mt-5"

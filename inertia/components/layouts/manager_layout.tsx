@@ -26,6 +26,7 @@ import {
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { ChevronRight } from 'lucide-react'
 import { Link } from '@inertiajs/react'
+import { Toaster } from '@/components/ui/sonner'
 
 const links = [
   {
@@ -92,6 +93,7 @@ export function ManagerLayout(props: PropsWithChildren<Props>) {
           )}
         </header>
         {props.children}
+        <Toaster />
       </SidebarInset>
     </SidebarProvider>
   )
