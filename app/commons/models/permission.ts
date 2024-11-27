@@ -9,10 +9,16 @@ export default class Permission extends BaseModel {
   declare id: number
 
   @column()
+  declare uid: string
+
+  @column()
   declare label: string
 
   @column()
-  declare uid: string
+  declare description: string
+
+  @column()
+  declare forAdmin: boolean
 
   @manyToMany(() => User)
   declare users: ManyToMany<typeof User>

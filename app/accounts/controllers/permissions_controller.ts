@@ -3,7 +3,7 @@ import Permission from '#models/permission'
 import {
   createPermissionValidator,
   updatePermissionValidator,
-} from '#app/role_access/validators/permissions_validator'
+} from '#app/accounts/validators/permissions_validator'
 
 export default class PermissionController {
   async index({ request, inertia }: HttpContext) {
@@ -12,7 +12,7 @@ export default class PermissionController {
 
     const permissions = await Permission.query().paginate(page, limit)
     //todo: Modifying the route path
-    return inertia.render('', { permissions })
+    return inertia.render('manager/accounts/permissions_overview', { permissions })
   }
 
   async create({ inertia }: HttpContext) {
@@ -24,7 +24,7 @@ export default class PermissionController {
     const data = await request.validateUsing(createPermissionValidator)
     await Permission.create(data)
 
-    return response.redirect().toRoute('permissions.index')
+    return response.redirect().toRoute('manager.permissions.index')
   }
 
   async edit({ inertia, params }: HttpContext) {

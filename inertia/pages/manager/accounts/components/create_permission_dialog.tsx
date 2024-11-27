@@ -10,51 +10,46 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { useForm } from 'react-hook-form'
-import {
-  CreateUserFormSchema,
-  createUserValidator,
-} from '@/pages/manager/accounts/validators/user_validators'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { router } from '@inertiajs/react'
 import { toast } from 'sonner'
 import { toastVariant } from '@/commons/utils'
 import { ReactElement, useState } from 'react'
-import { CreateUserForm } from '@/pages/manager/accounts/components/forms/create_user_form'
+import {
+  CreatePermissionFormSchema,
+  createPermissionValidator,
+} from '@/pages/manager/accounts/validators/permission_validators'
+import { CreatePermissionForm } from '@/pages/manager/accounts/components/forms/permission_form'
 
 type Props = {
   trigger: ReactElement
 }
 
-export function CreateUserDialog(props: Props) {
+export function CreatePermissionDialog(props: Props) {
   const [open, setOpen] = useState(false)
-  const form = useForm<CreateUserFormSchema>({
-    resolver: zodResolver(createUserValidator),
+  const form = useForm<CreatePermissionFormSchema>({
+    resolver: zodResolver(createPermissionValidator),
     defaultValues: {
-      firstname: '',
-      lastname: '',
-      email: '',
-      password: '',
-      password_confirmation: '',
-      roles: [],
-      structure: [],
-      type: 'user',
-      isActive: true,
+      uid: '',
+      label: '',
+      description: '',
+      forAdmin: false,
     },
   })
 
-  function handleSubmit(values: CreateUserFormSchema) {
-    router.post(`/manager/users`, values, {
+  function handleSubmit(values: CreatePermissionFormSchema) {
+    router.post(`/manager/permissions`, values, {
       onSuccess: () => {
         setOpen(false)
         toast.success('Success', {
           ...toastVariant.success,
-          description: 'User has been created.',
+          description: 'Permission has been created.',
         })
       },
       onError: () => {
         toast.error('Error', {
           ...toastVariant.error,
-          description: 'An error occurred while creating the user.',
+          description: 'An error occurred while creating the permission.',
         })
       },
     })
@@ -63,13 +58,13 @@ export function CreateUserDialog(props: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{props.trigger}</DialogTrigger>
-      <DialogContent className="sm:max-w-2xl w-full">
+      <DialogContent className="sm:max-w-sm w-full">
         <DialogHeader>
-          <DialogTitle>Create new user</DialogTitle>
-          <DialogDescription>Fill in the form to create a new user.</DialogDescription>
+          <DialogTitle>Create new permission</DialogTitle>
+          <DialogDescription>Fill in the form to create a new permission.</DialogDescription>
         </DialogHeader>
 
-        <CreateUserForm id="form" form={form} onSubmit={handleSubmit} />
+        <CreatePermissionForm id="form" form={form} onSubmit={handleSubmit} />
 
         <DialogFooter className="flex items-center sm:justify-start">
           <DialogClose asChild>

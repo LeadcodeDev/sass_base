@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
+import { z } from 'zod'
 
 export type State<T> = [T, Dispatch<SetStateAction<T>>]
 
@@ -16,3 +17,5 @@ export type Paginator<T> = {
     previousPageUrl: string | undefined
   }
 }
+
+export type ZodSchema<T extends z.ZodType<any, any, any>> = z.infer<T>

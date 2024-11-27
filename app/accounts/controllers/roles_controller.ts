@@ -1,12 +1,12 @@
 import { HttpContext } from '@adonisjs/core/http'
 import Role from '#models/role'
-import { createRoleValidator, updateRoleValidator } from '#app/role_access/validators/roles_validator'
+import { createRoleValidator, updateRoleValidator } from '#app/accounts/validators/roles_validator'
 
 export default class RolesController {
   async index({ inertia }: HttpContext) {
     const roles = await Role.query().preload('permissions').preload('users')
 
-    return inertia.render('permissions', { roles })
+    return inertia.render('manager/accounts/permissions_overview', { roles })
   }
 
   async create({ inertia }: HttpContext) {
