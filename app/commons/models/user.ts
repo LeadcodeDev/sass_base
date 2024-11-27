@@ -39,7 +39,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare type: UserType
 
   @column()
-  declare isActive: boolean
+  declare status: UserStatus
 
   @column()
   declare avatar: string
@@ -87,4 +87,10 @@ export enum UserType {
   user,
   practitioner,
   staff,
+}
+
+export enum UserStatus {
+  pending,
+  verified,
+  disabled,
 }
