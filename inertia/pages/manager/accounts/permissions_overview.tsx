@@ -15,7 +15,8 @@ import { Button } from '@/components/ui/button'
 import { PlusIcon } from 'lucide-react'
 import TableFilter, { ComponentFilter } from '@/components/commons/table_filter'
 import Permission from '#models/permission'
-import { CreatePermissionDialog } from '@/pages/manager/accounts/components/create_permission_dialog'
+import { CreatePermissionDialog } from '@/pages/manager/accounts/components/permissions/create_permission_dialog'
+import UpdatePermissionSidebar from '@/pages/manager/accounts/components/permissions/update_permission_sidebar'
 
 type Props = {
   permissions: Paginator<Permission>
@@ -74,9 +75,9 @@ export default function PermissionsOverview(props: Props) {
             )}
           />
         </Table>
-      </Fragment>
 
-      {/*<SidebarPermissionDetail state={[selectedPermission, setSelectedPermission]} />*/}
+        <UpdatePermissionSidebar state={[selectedPermission, setSelectedPermission]} />
+      </Fragment>
     </ManagerLayout>
   )
 }

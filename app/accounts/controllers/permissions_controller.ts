@@ -35,17 +35,17 @@ export default class PermissionController {
 
   async update({ request, response, params }: HttpContext) {
     const data = await request.validateUsing(updatePermissionValidator)
-    const permission = await Permission.findOrFail(params.id)
+    const permission = await Permission.findByOrFail('uid', params.uid)
 
     await permission.merge(data).save()
 
-    return response.redirect().toRoute('permissions.index')
+    return response.redirect().toRoute('manager.permissions.index')
   }
 
   async delete({ response, params }: HttpContext) {
-    const permission = await Permission.query().where('id', params.id).firstOrFail()
+    const permission = await Permission.query().where('uid', params.uid).firstOrFail()
     await permission.delete()
 
-    return response.redirect().toRoute('permissions.index')
+    return response.redirect().toRoute('manager.permissions.index')
   }
 }

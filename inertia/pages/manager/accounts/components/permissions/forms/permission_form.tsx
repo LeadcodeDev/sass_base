@@ -11,14 +11,17 @@ import { Switch } from '@/components/ui/switch'
 import { UseFormReturn } from 'react-hook-form'
 import { CreatePermissionFormSchema } from '@/pages/manager/accounts/validators/permission_validators'
 import { Textarea } from '@/components/ui/textarea'
+import { Button } from '@/components/ui/button'
+import { DeleteButton } from '@/components/commons/delete_button'
 
 type Props = {
   form: UseFormReturn<CreatePermissionFormSchema>
   onSubmit: (data: CreatePermissionFormSchema) => void
+  onDelete?: () => void
   id?: string
 }
 
-export function CreatePermissionForm(props: Props) {
+export function PermissionForm(props: Props) {
   return (
     <Form {...props.form}>
       <form id={props.id} onSubmit={props.form.handleSubmit(props.onSubmit)}>
@@ -88,7 +91,29 @@ export function CreatePermissionForm(props: Props) {
             )}
           />
         </div>
+        <PermissionFormAction onDelete={props.onDelete} />
       </form>
     </Form>
+  )
+}
+
+function PermissionFormAction(props: { onDelete?: () => void }) {
+  return (
+    <div className="flex items-center gap-2">
+      <Button type="submit" size="sm" className="mt-5">
+        Save
+      </Button>
+      {props.onDelete && (
+        <DeleteButton
+          word="confirmation"
+          onSubmit={props.onDelete}
+          variant="destructive"
+          size="sm"
+          className="mt-5"
+        >
+          Supprimer
+        </DeleteButton>
+      )}
+    </div>
   )
 }

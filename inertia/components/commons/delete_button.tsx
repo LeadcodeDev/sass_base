@@ -1,6 +1,6 @@
 import { Button, buttonVariants } from '@/components/ui/button'
 import type { VariantProps } from 'class-variance-authority'
-import { ButtonHTMLAttributes, Fragment, useState } from 'react'
+import { ButtonHTMLAttributes, Fragment, useEffect, useState } from 'react'
 import {
   Dialog,
   DialogClose,
@@ -23,12 +23,18 @@ enum Step {
 type Props = ButtonHTMLAttributes<HTMLButtonElement> &
   VariantProps<typeof buttonVariants> & {
     onSubmit: (event: MouseEvent) => void
+    onStepChange?: (step: Step) => void
     word?: string
   }
 
-export function DeleteButton(props: Props) {
+export function DeleteButton({onStepChange, ...props }: Props) {
   const [step, setStep] = useState<Step>(Step.initial)
   const [word, setWord] = useState<string>('')
+
+  useEffect(() => {
+    if (!onStepChange) return
+    onStepChange(step)
+  }, [step])
 
   return (
     <Fragment>

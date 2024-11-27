@@ -9,16 +9,16 @@ import {
 } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
 import { Fragment, useState } from 'react'
-import SidebarUserDetail from '@/pages/manager/accounts/components/sidebar_user_detail'
 
 import User from '#models/user'
 import { Paginator, State } from '@/commons/types'
 import { Searchbar } from '@/components/commons/searchbar'
-import { CreateUserDialog } from '@/pages/manager/accounts/components/create_user_dialog'
 import { Button } from '@/components/ui/button'
 import { CopyIcon, PlusIcon } from 'lucide-react'
 import { toast } from 'sonner'
 import TableFilter, { ComponentFilter } from '@/components/commons/table_filter'
+import UpdateUserSidebar from '@/pages/manager/accounts/components/users/update_permission_sidebar'
+import { CreateUserDialog } from '@/pages/manager/accounts/components/users/create_user_dialog'
 
 type Props = {
   users: Paginator<User>
@@ -67,12 +67,14 @@ export default function UsersOverview(props: Props) {
           </TableHeader>
           <TableBody
             data={props.users.data}
-            builder={(user) => <RowBuilder key={user.uid} user={user} state={[selectedUser, setSelectedUser]} />}
+            builder={(user) => (
+              <RowBuilder key={user.uid} user={user} state={[selectedUser, setSelectedUser]} />
+            )}
           />
         </Table>
       </Fragment>
 
-      <SidebarUserDetail state={[selectedUser, setSelectedUser]} />
+      <UpdateUserSidebar state={[selectedUser, setSelectedUser]} />
     </ManagerLayout>
   )
 }

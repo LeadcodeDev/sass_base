@@ -17,13 +17,13 @@ import {
   updateUserValidator,
 } from '@/pages/manager/accounts/validators/user_validators'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { UpdateUserForm } from '@/pages/manager/accounts/components/forms/update_user_form'
+import { UpdateUserForm } from '@/pages/manager/accounts/components/users/forms/update_user_form'
 
 type Props = {
   state: State<User | null>
 }
 
-export default function SidebarUserDetail(props: Props) {
+export default function UpdateUserSidebar(props: Props) {
   const [selectedUser, setSelectedUser] = props.state
   const form = useForm<UpdateUserFormSchema>({
     resolver: zodResolver(updateUserValidator),
