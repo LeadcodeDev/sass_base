@@ -1,5 +1,5 @@
-import { policies } from '#app/role_access/policies/main'
-import * as abilities from '#app/role_access/abilities/main'
+import { policies } from '#app/commons/policies/main'
+import * as abilities from '#app/commons/abilities/main'
 
 import { Bouncer } from '@adonisjs/bouncer'
 import type { HttpContext } from '@adonisjs/core/http'

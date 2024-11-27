@@ -9,7 +9,7 @@ import Role from '#models/role'
 import Permission from '#models/permission'
 import { Infer } from '@vinejs/vine/types'
 import StringHelper from '@adonisjs/core/helpers/string'
-import { userSearchValidator } from '#app/users/validators/user_validator'
+import { userSearchValidator } from '#app/accounts/validators/user_validator'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],

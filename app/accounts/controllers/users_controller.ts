@@ -3,7 +3,7 @@ import {
   createUserValidator,
   updateUserValidator,
   userSearchValidator,
-} from '#app/users/validators/user_validator'
+} from '#app/accounts/validators/user_validator'
 import User from '#models/user'
 
 export default class UsersController {
@@ -14,7 +14,7 @@ export default class UsersController {
       .withScopes((scopes) => scopes.search(search, type, isActive))
       .paginate(page ?? 1, limit ?? 20)
 
-    return inertia.render('manager/accounts/overview', { users })
+    return inertia.render('manager/accounts/users_overview', { users })
   }
 
   async create({ inertia }: HttpContext) {
