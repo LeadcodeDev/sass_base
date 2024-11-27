@@ -4,7 +4,7 @@ import type { Authenticators } from '@adonisjs/auth/types'
 
 /**
  * Auth middleware is used authenticate HTTP requests and deny
- * access to unauthenticated users.
+ * access to unauthenticated accounts.
  */
 export default class AuthMiddleware {
   /**

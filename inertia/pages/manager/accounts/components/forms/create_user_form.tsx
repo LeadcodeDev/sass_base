@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 import SelectBox from '@/components/ui/select'
 import { UseFormReturn } from 'react-hook-form'
-import { CreateUserFormSchema } from '@/pages/manager/users/validators/user_validators'
+import { CreateUserFormSchema } from '@/pages/manager/accounts/validators/user_validators'
 
 type Props = {
   form: UseFormReturn<CreateUserFormSchema>

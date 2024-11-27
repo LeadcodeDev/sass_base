@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 import SelectBox from '@/components/ui/select'
 import { UseFormReturn } from 'react-hook-form'
-import { UpdateUserFormSchema } from '@/pages/manager/users/validators/user_validators'
+import { UpdateUserFormSchema } from '@/pages/manager/accounts/validators/user_validators'
 import { Button } from '@/components/ui/button'
 import { DeleteButton } from '@/components/commons/delete_button'
 

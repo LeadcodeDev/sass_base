@@ -12,7 +12,7 @@ router
         router.put(':uid', [UsersController, 'update']).as('update')
         router.delete(':uid', [UsersController, 'delete']).as('delete')
       })
-      .prefix('/users')
+      .prefix('/accounts')
       .as('users')
   })
   .prefix('/manager')

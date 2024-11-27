@@ -13,13 +13,13 @@ import { useForm } from 'react-hook-form'
 import {
   CreateUserFormSchema, createUserValidator,
   UpdateUserFormSchema,
-} from '@/pages/manager/users/validators/user_validators'
+} from '@/pages/manager/accounts/validators/user_validators'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { router } from '@inertiajs/react'
 import { toast } from 'sonner'
 import { toastVariant } from '@/commons/utils'
 import { ReactElement, useState } from 'react'
-import { CreateUserForm } from '@/pages/manager/users/components/forms/create_user_form'
+import { CreateUserForm } from '@/pages/manager/accounts/components/forms/create_user_form'
 
 type Props = {
   trigger: ReactElement

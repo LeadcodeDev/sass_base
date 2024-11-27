@@ -15,9 +15,9 @@ import { toastVariant } from '@/commons/utils'
 import {
   UpdateUserFormSchema,
   updateUserValidator,
-} from '@/pages/manager/users/validators/user_validators'
+} from '@/pages/manager/accounts/validators/user_validators'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { UpdateUserForm } from '@/pages/manager/users/components/forms/update_user_form'
+import { UpdateUserForm } from '@/pages/manager/accounts/components/forms/update_user_form'
 
 type Props = {
   state: State<User | null>
