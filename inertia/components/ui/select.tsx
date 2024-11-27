@@ -65,7 +65,7 @@ const SelectBox = forwardRef<HTMLInputElement, SelectBoxProps>((props, ref) => {
         <Button
           variant={'outline'}
           className={cn(
-            'flex min-h-[36px] cursor-pointer items-center justify-between rounded-md border !px-2 py-1 data-[state=open]:border-ring w-full h-full',
+            'flex min-h-[36px] cursor-pointer items-center justify-between rounded-md border !px-2 py-1 data-[state=open]:border-ring w-full',
             props.className
           )}
         >
