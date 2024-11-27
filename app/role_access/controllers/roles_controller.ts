@@ -1,6 +1,6 @@
 import { HttpContext } from '@adonisjs/core/http'
 import Role from '#models/role'
-import { createRoleValidator, updateRoleValidator } from '#app/bouncer/validators/roles_validator'
+import { createRoleValidator, updateRoleValidator } from '#app/role_access/validators/roles_validator'
 
 export default class RolesController {
   async index({ inertia }: HttpContext) {

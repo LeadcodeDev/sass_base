@@ -4,7 +4,7 @@
 |--------------------------------------------------------------------------
 |
 | You may define a collection of policies inside this file and pre-register
-| them when creating a new bouncer instance.
+| them when creating a new role_access instance.
 |
 | Pre-registered policies and abilities can be referenced as a string by their
 | name. Also they are must if want to perform authorization inside Edge

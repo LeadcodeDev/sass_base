@@ -1,6 +1,6 @@
 import router from '@adonisjs/core/services/router'
-const RolesController = () => import('#app/bouncer/controllers/roles_controller')
-const PermissionController = () => import('#app/bouncer/controllers/permissions_controller')
+const RolesController = () => import('#app/role_access/controllers/roles_controller')
+const PermissionController = () => import('#app/role_access/controllers/permissions_controller')
 
 router
   .group(() => {

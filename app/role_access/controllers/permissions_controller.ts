@@ -3,7 +3,7 @@ import Permission from '#models/permission'
 import {
   createPermissionValidator,
   updatePermissionValidator,
-} from '#app/bouncer/validators/permissions_validator'
+} from '#app/role_access/validators/permissions_validator'
 
 export default class PermissionController {
   async index({ request, inertia }: HttpContext) {
