@@ -1,8 +1,10 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, manyToMany } from '@adonisjs/lucid/orm'
+import { BaseModel, column, manyToMany, scope } from '@adonisjs/lucid/orm'
 import User from '#models/user'
 import type { ManyToMany } from '@adonisjs/lucid/types/relations'
 import Role from '#models/role'
+import { Infer } from '@vinejs/vine/types'
+import { permissionSearchValidator } from '#app/accounts/validators/permissions_validator'
 
 export default class Permission extends BaseModel {
   @column({ isPrimary: true })
@@ -31,4 +33,21 @@ export default class Permission extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  static search = scope(
+    (
+      query,
+      search: Infer<typeof permissionSearchValidator>['search'],
+      forAdmin: Infer<typeof permissionSearchValidator>['forAdmin']
+    ) => {
+      query.if(search, (builder) => {
+        const columns = ['uid', 'label']
+        columns.forEach((field) => {
+          builder.orWhere(field, 'like', `%${search}%`)
+        })
+      })
+
+      query.if(forAdmin !== undefined, (builder) => builder.andWhere('for_admin', forAdmin!))
+    }
+  )
 }

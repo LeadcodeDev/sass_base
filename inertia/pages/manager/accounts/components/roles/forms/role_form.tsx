@@ -7,51 +7,37 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Switch } from '@/components/ui/switch'
 import { UseFormReturn } from 'react-hook-form'
-import {
-  CreatePermissionFormSchema,
-  UpdatePermissionFormSchema
-} from '@/pages/manager/accounts/validators/permission_validators'
 import { Textarea } from '@/components/ui/textarea'
 import { ReactNode } from 'react'
+import { CreateRoleFormSchema, UpdateRoleFormSchema } from '@/pages/manager/accounts/validators/role_validators'
+import { Switch } from '@/components/ui/switch'
+import Permission from '#models/permission'
+import SelectBox from '@/components/ui/select'
 
-type PermissionFormSchema = CreatePermissionFormSchema | UpdatePermissionFormSchema
+type RoleFormSchema = CreateRoleFormSchema | UpdateRoleFormSchema
 
 type Props = {
-  form: UseFormReturn<PermissionFormSchema>
-  onSubmit: (data: PermissionFormSchema) => void
+  form: UseFormReturn<RoleFormSchema>
+  permissions: Permission[]
+  onSubmit: (data: RoleFormSchema) => void
   actions?: ReactNode
   id?: string
 }
 
-export function PermissionForm(props: Props) {
+export function RoleForm(props: Props) {
   return (
     <Form {...props.form}>
       <form id={props.id} onSubmit={props.form.handleSubmit(props.onSubmit)}>
         <div className="flex flex-col gap-5">
           <FormField
             control={props.form.control}
-            name="uid"
-            render={({ field }) => (
-              <FormItem className="flex-1">
-                <FormLabel>Identifier</FormLabel>
-                <FormControl>
-                  <Input placeholder="domain:resource:action" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={props.form.control}
-            name="label"
+            name="name"
             render={({ field }) => (
               <FormItem className="flex-1">
                 <FormLabel>Label</FormLabel>
                 <FormControl>
-                  <Input placeholder="Permission label" {...field} />
+                  <Input placeholder="Role label" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -66,9 +52,34 @@ export function PermissionForm(props: Props) {
                 <FormLabel>Description</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Explain what this permission does"
+                    placeholder="Explain what this role does"
                     className="resize-none"
                     {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={props.form.control}
+            name="permissions"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Permissions</FormLabel>
+                <FormControl>
+                  <SelectBox
+                    options={props.permissions.map((permission) => ({
+                      label: permission.label,
+                      value: permission.id.toString(),
+                    }))}
+                    defaultValue={field.value}
+                    onChange={field.onChange}
+                    placeholder="Select type..."
+                    inputPlaceholder="Search type"
+                    emptyPlaceholder="No type found."
+                    multiple
                   />
                 </FormControl>
                 <FormMessage />

@@ -41,7 +41,11 @@ export default function UsersOverview(props: Props) {
             redirect="/manager/users/overview"
           />
 
-          <TableFilter itemPerPage={props.users.meta.perPage} resources={filterOptions} />
+          <TableFilter
+            itemPerPage={props.users.meta.perPage}
+            resources={filterOptions}
+            resourceRoute="/manager/users/overview"
+          />
 
           <CreateUserDialog trigger={<Button size="sm">New user</Button>} />
         </div>

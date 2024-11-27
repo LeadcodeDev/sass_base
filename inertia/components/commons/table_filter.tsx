@@ -19,6 +19,7 @@ type ComboboxFilter = {
 type Props = {
   itemPerPage?: number
   resources?: ComponentFilter
+  resourceRoute: string
 }
 
 export default function TableFilter(props: Props) {
@@ -44,7 +45,7 @@ export default function TableFilter(props: Props) {
             <Label>Results per page</Label>
             <Combobox
               defaultValue={props.itemPerPage?.toString()}
-              onChange={handleChangeItemPerPage}
+              onChange={(value) => handleChangeItemPerPage(props.resourceRoute, value)}
               expanded
               items={[
                 { label: '10', value: '10' },
@@ -66,7 +67,9 @@ export default function TableFilter(props: Props) {
                     defaultValue={
                       findCurrentOptionFromParameters(resource.options, resource.searchKey)?.value
                     }
-                    onChange={(value) => handleChangeParameter(resource.searchKey, value)}
+                    onChange={(value) =>
+                      handleChangeParameter(props.resourceRoute, resource.searchKey, value)
+                    }
                     expanded
                     multiple={resource.multiple}
                     items={resource.options}

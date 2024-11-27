@@ -1,4 +1,12 @@
 import vine from '@vinejs/vine'
+import { searchComposable } from '#app/commons/validators/searchable'
+
+export const permissionSearchValidator = vine.compile(
+  vine.object({
+    ...searchComposable.getProperties(),
+    forAdmin: vine.boolean().optional(),
+  })
+)
 
 export const createPermissionValidator = vine.compile(
   vine.object({

@@ -7,7 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.bigIncrements('id').primary()
       table.string('label').notNullable()
-      table.string('uid').notNullable()
+      table.string('uid').notNullable().unique()
       table.string('description').nullable()
       table.boolean('for_admin').defaultTo(false)
       table.timestamp('created_at')

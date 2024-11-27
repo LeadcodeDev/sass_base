@@ -2,16 +2,23 @@ import type { HttpContext } from '@adonisjs/core/http'
 import Permission from '#models/permission'
 import {
   createPermissionValidator,
+  permissionSearchValidator,
   updatePermissionValidator,
 } from '#app/accounts/validators/permissions_validator'
 
 export default class PermissionController {
   async index({ request, inertia }: HttpContext) {
-    const page = request.input('page', 1)
-    const limit = request.input('limit', 20)
+    const { page, limit, search, forAdmin } = await request.validateUsing(permissionSearchValidator)
 
-    const permissions = await Permission.query().paginate(page, limit)
-    //todo: Modifying the route path
+    const permissions = await Permission.query()
+      .withScopes((scopes) => scopes.search(search, forAdmin))
+      .paginate(page ?? 1, limit ?? 20)
+
+    const contentType = request.header('Content-Type')
+    if (contentType === 'application/json') {
+      return permissions
+    }
+
     return inertia.render('manager/accounts/permissions_overview', { permissions })
   }
 

@@ -10,9 +10,9 @@ export function getCurrentParameters(source?: URLSearchParams): { [key: string]:
   return queryParams.entries().reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
 }
 
-export function handleChangeItemPerPage(value: string | number) {
+export function handleChangeItemPerPage(url: string, value: string | number) {
   router.get(
-    '/manager/users/overview',
+    url,
     {
       ...getCurrentParameters(),
       limit: value,
@@ -23,7 +23,7 @@ export function handleChangeItemPerPage(value: string | number) {
   )
 }
 
-export function handleChangeParameter(key: string, value: string | number | boolean) {
+export function handleChangeParameter(resourceRoute: string, key: string, value: string | number | boolean) {
   const queryParams = new URLSearchParams(window.location.search)
   const target = queryParams.get(key)
 
@@ -33,7 +33,7 @@ export function handleChangeParameter(key: string, value: string | number | bool
     queryParams.set(key, value.toString())
   }
 
-  router.get('/manager/users/overview', getCurrentParameters(queryParams), {
+  router.get(resourceRoute, getCurrentParameters(queryParams), {
     preserveState: true,
   })
 }

@@ -14,51 +14,53 @@ import { Searchbar } from '@/components/commons/searchbar'
 import { Button } from '@/components/ui/button'
 import { PlusIcon } from 'lucide-react'
 import TableFilter, { ComponentFilter } from '@/components/commons/table_filter'
+import { CreateRoleDialog } from '@/pages/manager/accounts/components/roles/create_role_dialog'
+import UpdateRoleSidebar from '@/pages/manager/accounts/components/roles/update_role_sidebar'
+import Role from '#models/role'
 import Permission from '#models/permission'
-import { CreatePermissionDialog } from '@/pages/manager/accounts/components/permissions/create_permission_dialog'
-import UpdatePermissionSidebar from '@/pages/manager/accounts/components/permissions/update_permission_sidebar'
 
 type Props = {
-  permissions: Paginator<Permission>
+  roles: Paginator<Role>
+  permissions: Permission[]
 }
 
-export default function PermissionsOverview(props: Props) {
-  const [selectedPermission, setSelectedPermission] = useState<Permission | null>(null)
+export default function RolesOverview(props: Props) {
+  const [selectedRole, setSelectedRole] = useState<Role | null>(null)
 
   return (
     <ManagerLayout
       breadcrumb={[
         { label: 'Manager', url: '/manager' },
-        { label: 'Permissions overview', url: '/manager/permissions' },
+        { label: 'Roles overview', url: '/manager/roles' },
       ]}
       trailing={
         <div className="flex items-center justify-end gap-x-2">
           <Searchbar
-            placeholder="Search for a permission..."
+            placeholder="Search for a role..."
             searchKey="search"
-            redirect="/manager/permissions/overview"
+            redirect="/manager/roles/overview"
           />
 
           <TableFilter
-            itemPerPage={props.permissions.meta.perPage}
+            itemPerPage={props.roles.meta.perPage}
             resources={filterOptions}
-            resourceRoute="/manager/permissions/overview"
+            resourceRoute="/manager/roles/overview"
           />
 
-          <CreatePermissionDialog trigger={<Button size="sm">New permission</Button>} />
+          <CreateRoleDialog trigger={<Button size="sm">New role</Button>} />
         </div>
       }
     >
       <Fragment>
         <div className="p-5 border-b">
           <h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
-            Permission accounts
+            Roles account
           </h2>
           <p className="text-sm text-muted-foreground">
-            Manage your permission accounts. You can create, update, delete, and view permissions.
+            Manage your role accounts. You can create, update, delete, and view roles.
           </p>
         </div>
-        <Table meta={props.permissions.meta} empty={<EmptyData />}>
+        <Table meta={props.roles.meta} empty={<EmptyData />}>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">ID</TableHead>
@@ -69,49 +71,42 @@ export default function PermissionsOverview(props: Props) {
             </TableRow>
           </TableHeader>
           <TableBody
-            data={props.permissions.data}
-            builder={(permission) => (
-              <RowBuilder
-                key={permission.uid}
-                permission={permission}
-                state={[selectedPermission, setSelectedPermission]}
-              />
+            data={props.roles.data}
+            builder={(role) => (
+              <RowBuilder key={role.id} role={role} state={[selectedRole, setSelectedRole]} />
             )}
           />
         </Table>
 
-        <UpdatePermissionSidebar state={[selectedPermission, setSelectedPermission]} />
+        <UpdateRoleSidebar state={[selectedRole, setSelectedRole]} />
       </Fragment>
     </ManagerLayout>
   )
 }
 
-function RowBuilder(props: { permission: Permission; state: State<Permission | null> }) {
-  const [_, setSelectedPermission] = props.state
+function RowBuilder(props: { role: Role; state: State<Role | null> }) {
+  const [_, setSelectedRole] = props.state
 
   return (
     <TableRow>
       <TableCell className="font-medium whitespace-nowrap !text-xs">
         <Badge variant="outline" className="cursor-pointer">
-          {props.permission.uid}
+          {props.role.uid}
         </Badge>
       </TableCell>
-      <TableCell onClick={() => setSelectedPermission(props.permission)} className="cursor-pointer">
-        {props.permission.label}
+      <TableCell onClick={() => setSelectedRole(props.role)} className="cursor-pointer">
+        {props.role.name}
       </TableCell>
       <TableCell
-        onClick={() => setSelectedPermission(props.permission)}
+        onClick={() => setSelectedRole(props.role)}
         className="flex items-center gap-x-2 cursor-pointer"
       >
-        <Badge variant="outline">{props.permission.forAdmin ? 'true' : 'false'}</Badge>
+        <Badge variant="outline">{props.role.forAdmin ? 'true' : 'false'}</Badge>
       </TableCell>
-      <TableCell onClick={() => setSelectedPermission(props.permission)} className="cursor-pointer">
-        <p className="truncate max-w-[300px]">{props.permission.description}</p>
+      <TableCell onClick={() => setSelectedRole(props.role)} className="cursor-pointer">
+        <p className="truncate max-w-[300px]">{props.role.description}</p>
       </TableCell>
-      <TableCell
-        onClick={() => setSelectedPermission(props.permission)}
-        className="text-right cursor-pointer"
-      >
+      <TableCell onClick={() => setSelectedRole(props.role)} className="text-right cursor-pointer">
         Actions
       </TableCell>
     </TableRow>
@@ -125,11 +120,11 @@ function EmptyData() {
         <div className="">
           <h2 className="text-xl text-center mt-5">No data found.</h2>
           <div className="mt-5">
-            <CreatePermissionDialog
+            <CreateRoleDialog
               trigger={
                 <Button variant="outline" size="sm">
                   <PlusIcon />
-                  New permission
+                  New role
                 </Button>
               }
             />
