@@ -17,6 +17,8 @@ import {
 } from '@/pages/manager/accounts/validators/permission_validators'
 import Permission from '#models/permission'
 import { PermissionForm } from '@/pages/manager/accounts/components/permissions/forms/permission_form'
+import { Button } from '@/components/ui/button'
+import { DeleteButton } from '@/components/commons/delete_button'
 
 type Props = {
   state: State<Permission | null>
@@ -82,8 +84,33 @@ export default function UpdatePermissionSidebar(props: Props) {
             data from our servers.
           </SheetDescription>
         </SheetHeader>
-        <PermissionForm form={form} onSubmit={handleSubmit} onDelete={handleDelete} />
+        <PermissionForm
+          form={form}
+          onSubmit={handleSubmit}
+          actions={<PermissionFormAction onDelete={handleDelete} />}
+        />
       </SheetContent>
     </Sheet>
+  )
+}
+
+function PermissionFormAction(props: { onDelete?: () => void }) {
+  return (
+    <div className="flex items-center gap-2">
+      <Button type="submit" size="sm" className="mt-5">
+        Save
+      </Button>
+      {props.onDelete && (
+        <DeleteButton
+          word="confirmation"
+          onSubmit={props.onDelete}
+          variant="destructive"
+          size="sm"
+          className="mt-5"
+        >
+          Supprimer
+        </DeleteButton>
+      )}
+    </div>
   )
 }
