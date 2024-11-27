@@ -1,5 +1,14 @@
 import vine from '@vinejs/vine'
 import { UserType } from '#models/user'
+import { searchComposable } from '#app/commons/validators/searchable'
+
+export const userSearchValidator = vine.compile(
+  vine.object({
+    ...searchComposable.getProperties(),
+    type: vine.enum(UserType).optional(),
+    isActive: vine.boolean().optional(),
+  })
+)
 
 export const createUserValidator = vine.compile(
   vine.object({

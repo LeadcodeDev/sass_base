@@ -12,12 +12,13 @@ import { Fragment, useState } from 'react'
 import SidebarUserDetail from '@/pages/manager/users/components/sidebar_user_detail'
 
 import User from '#models/user'
-import { Paginator } from '@/commons/types'
+import { Paginator, State } from '@/commons/types'
 import { Searchbar } from '@/components/commons/searchbar'
 import { CreateUserDialog } from '@/pages/manager/users/components/create_user_dialog'
 import { Button } from '@/components/ui/button'
 import { CopyIcon, PlusIcon } from 'lucide-react'
 import { toast } from 'sonner'
+import TableFilter, { ComponentFilter } from '@/components/commons/table_filter'
 
 type Props = {
   users: Paginator<User>
@@ -25,13 +26,6 @@ type Props = {
 
 export default function UsersOverview(props: Props) {
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
-
-  async function onCopy(user: User) {
-    await navigator.clipboard.writeText(user.uid)
-    toast('Copied to the clipboard', {
-      icon: <CopyIcon className="size-4" />,
-    })
-  }
 
   return (
     <ManagerLayout
@@ -46,6 +40,8 @@ export default function UsersOverview(props: Props) {
             searchKey="search"
             redirect="/manager/users/overview"
           />
+
+          <TableFilter itemPerPage={props.users.meta.perPage} resources={filterOptions} />
 
           <CreateUserDialog trigger={<Button size="sm">New user</Button>} />
         </div>
@@ -71,38 +67,48 @@ export default function UsersOverview(props: Props) {
           </TableHeader>
           <TableBody
             data={props.users.data}
-            builder={(user) => (
-              <TableRow key={user.id}>
-                <TableCell className="font-medium whitespace-nowrap !text-xs">
-                  <Badge onClick={() => onCopy(user)} variant="outline" className="cursor-pointer">
-                    {user.uid}
-                    <CopyIcon className="ml-2 -mr-1 size-2" />
-                  </Badge>
-                </TableCell>
-                <TableCell onClick={() => setSelectedUser(user)} className="cursor-pointer">
-                  {user.firstname} {user.lastname}
-                </TableCell>
-                <TableCell
-                  onClick={() => setSelectedUser(user)}
-                  className="flex items-center gap-x-2 cursor-pointer"
-                >
-                  <Badge variant="outline">{user.type}</Badge>
-                  {!user.isActive && <Badge variant="destructive">Deactivate</Badge>}
-                </TableCell>
-                <TableCell
-                  onClick={() => setSelectedUser(user)}
-                  className="text-right cursor-pointer"
-                >
-                  Actions
-                </TableCell>
-              </TableRow>
-            )}
+            builder={(user) => <RowBuilder key={user.uid} user={user} state={[selectedUser, setSelectedUser]} />}
           />
         </Table>
       </Fragment>
 
       <SidebarUserDetail state={[selectedUser, setSelectedUser]} />
     </ManagerLayout>
+  )
+}
+
+function RowBuilder(props: { user: User; state: State<User | null> }) {
+  const [_, setSelectedUser] = props.state
+
+  async function onCopy(user: User) {
+    await navigator.clipboard.writeText(user.uid)
+    toast('Copied to the clipboard', {
+      icon: <CopyIcon className="size-4" />,
+    })
+  }
+
+  return (
+    <TableRow>
+      <TableCell className="font-medium whitespace-nowrap !text-xs">
+        <Badge onClick={() => onCopy(props.user)} variant="outline" className="cursor-pointer">
+          {props.user.uid}
+          <CopyIcon className="ml-2 -mr-1 size-2" />
+        </Badge>
+      </TableCell>
+      <TableCell onClick={() => setSelectedUser(props.user)} className="cursor-pointer">
+        {props.user.firstname} {props.user.lastname}
+      </TableCell>
+      <TableCell
+        onClick={() => setSelectedUser(props.user)}
+        className="flex items-center gap-x-2 cursor-pointer"
+      >
+        <Badge variant="outline">{props.user.type}</Badge>
+        {!props.user.isActive && <Badge variant="destructive">Deactivate</Badge>}
+      </TableCell>
+      <TableCell onClick={() => setSelectedUser(props.user)} className="text-right cursor-pointer">
+        Actions
+      </TableCell>
+    </TableRow>
   )
 }
 
@@ -127,3 +133,27 @@ function EmptyData() {
     </div>
   )
 }
+
+const filterOptions: ComponentFilter = [
+  {
+    type: 'combobox',
+    label: 'Account types',
+    multiple: false,
+    searchKey: 'type',
+    options: [
+      { label: 'Staff', value: 'staff' },
+      { label: 'Practitioner', value: 'practitioner' },
+      { label: 'User', value: 'user' },
+    ],
+  },
+  {
+    type: 'combobox',
+    label: 'Account status',
+    multiple: false,
+    searchKey: 'isActive',
+    options: [
+      { label: 'Oui', value: 'true' },
+      { label: 'Non', value: 'false' },
+    ],
+  },
+]

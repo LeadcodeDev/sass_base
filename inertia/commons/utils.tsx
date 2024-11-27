@@ -11,9 +11,30 @@ export function getCurrentParameters(source?: URLSearchParams): { [key: string]:
 }
 
 export function handleChangeItemPerPage(value: string | number) {
-  router.get('/manager/users/overview', {
-    ...getCurrentParameters(),
-    limit: value,
+  router.get(
+    '/manager/users/overview',
+    {
+      ...getCurrentParameters(),
+      limit: value,
+    },
+    {
+      preserveState: true,
+    }
+  )
+}
+
+export function handleChangeParameter(key: string, value: string | number | boolean) {
+  const queryParams = new URLSearchParams(window.location.search)
+  const target = queryParams.get(key)
+
+  if (target === value) {
+    queryParams.delete(key)
+  } else {
+    queryParams.set(key, value.toString())
+  }
+
+  router.get('/manager/users/overview', getCurrentParameters(queryParams), {
+    preserveState: true,
   })
 }
 
@@ -40,8 +61,8 @@ export function handleSearchByKey(
 }
 
 enum ToastVariant {
-  error= 'error',
-  success= 'success',
+  error = 'error',
+  success = 'success',
 }
 
 const baseVariant: ExternalToast = {
@@ -62,5 +83,5 @@ const baseVariant: ExternalToast = {
 
 export const toastVariant: { [key in ToastVariant]: ExternalToast } = {
   error: baseVariant,
-  success: baseVariant
+  success: baseVariant,
 }

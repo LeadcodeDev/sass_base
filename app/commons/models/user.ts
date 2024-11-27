@@ -1,15 +1,15 @@
 import { DateTime } from 'luxon'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, column, beforeCreate, manyToMany, scope } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, column, manyToMany, scope } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 import type { ManyToMany } from '@adonisjs/lucid/types/relations'
 import Role from '#models/role'
 import Permission from '#models/permission'
-import { searchValidator } from '#app/commons/validators/searchable'
 import { Infer } from '@vinejs/vine/types'
 import StringHelper from '@adonisjs/core/helpers/string'
+import { userSearchValidator } from '#app/users/validators/user_validator'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -60,14 +60,24 @@ export default class User extends compose(BaseModel, AuthFinder) {
     user.uid = StringHelper.generateRandom(10)
   }
 
-  static search = scope((query, value: Infer<typeof searchValidator>['search']) => {
-    if (!value) return
+  static search = scope(
+    (
+      query,
+      search: Infer<typeof userSearchValidator>['search'],
+      type: Infer<typeof userSearchValidator>['type'],
+      isActive: Infer<typeof userSearchValidator>['isActive']
+    ) => {
+      query.if(search, (builder) => {
+        const columns = ['firstname', 'lastname', 'email', 'uid']
+        columns.forEach((field) => {
+          builder.orWhere(field, 'like', `%${search}%`)
+        })
+      })
 
-    const columns = ['firstname', 'lastname', 'email', 'uid', 'type']
-    columns.forEach((field) => {
-      query.orWhere(field, 'like', `%${value}%`)
-    })
-  })
+      query.if(type, (builder) => builder.andWhere('type', type!))
+      query.if(isActive !== undefined, (builder) => builder.andWhere('is_active', isActive!))
+    }
+  )
 }
 
 export enum UserType {

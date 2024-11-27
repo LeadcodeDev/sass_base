@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { forwardRef, Fragment, HTMLAttributes, ReactNode } from 'react'
-import { cn, handleChangeCurrentPage, handleChangeItemPerPage } from '@/commons/utils'
+import { cn, handleChangeCurrentPage } from '@/commons/utils'
 import {
   Pagination,
   PaginationContent,
@@ -9,7 +9,6 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination'
 import { Paginator } from '@/commons/types'
-import { Combobox } from '@/components/ui/combobox'
 
 type TableProps<T> = HTMLAttributes<HTMLTableElement> & {
   meta: Paginator<T>['meta']
@@ -25,7 +24,7 @@ function Table<T>({ className, ...props }: TableProps<T>) {
     <div className="relative w-full overflow-auto">
       <table className={cn('w-full caption-bottom text-sm', className)} {...props} />
 
-      <Pagination className="flex items-center justify-between">
+      <Pagination className="flex items-center justify-between py-5">
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious
@@ -105,19 +104,6 @@ function Table<T>({ className, ...props }: TableProps<T>) {
             />
           </PaginationItem>
         </PaginationContent>
-        <div className="py-2 px-1">
-          <Combobox
-            defaultValue={props.meta.perPage.toString()}
-            onChange={handleChangeItemPerPage}
-            expanded
-            items={[
-              { label: '10', value: '10' },
-              { label: '20', value: '20' },
-              { label: '50', value: '50' },
-              { label: '100', value: '100' },
-            ]}
-          />
-        </div>
       </Pagination>
     </div>
   )

@@ -1,17 +1,19 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import { createUserValidator, updateUserValidator } from '#app/users/validators/user_validator'
+import {
+  createUserValidator,
+  updateUserValidator,
+  userSearchValidator,
+} from '#app/users/validators/user_validator'
 import User from '#models/user'
-import { searchValidator } from '#app/commons/validators/searchable'
 
 export default class UsersController {
   async index({ inertia, request }: HttpContext) {
-    const { page, limit, search } = await request.validateUsing(searchValidator)
+    const { page, limit, search, type, isActive } = await request.validateUsing(userSearchValidator)
 
     const users = await User.query()
-      .withScopes((scopes) => scopes.search(search))
+      .withScopes((scopes) => scopes.search(search, type, isActive))
       .paginate(page ?? 1, limit ?? 20)
 
-    //todo: Modifying the route path
     return inertia.render('manager/users/overview', { users })
   }
 
