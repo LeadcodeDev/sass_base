@@ -18,10 +18,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { router } from '@inertiajs/react'
 import { toast } from 'sonner'
 import { toastVariant } from '@/commons/utils'
-import { useState } from 'react'
+import { ReactElement, useState } from 'react'
 import { CreateUserForm } from '@/pages/manager/users/components/forms/create_user_form'
 
-export function CreateUserDialog() {
+type Props = {
+  trigger: ReactElement
+}
+
+export function CreateUserDialog(props: Props) {
   const [open, setOpen] = useState(false)
   const form = useForm<CreateUserFormSchema>({
     resolver: zodResolver(createUserValidator),
@@ -59,7 +63,7 @@ export function CreateUserDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm">New user</Button>
+        {props.trigger}
       </DialogTrigger>
       <DialogContent className="sm:max-w-2xl w-full">
         <DialogHeader>

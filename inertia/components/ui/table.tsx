@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { cn, handleChangeCurrentPage, handleChangeItemPerPage } from '@/commons/utils'
 import { forwardRef, Fragment, HTMLAttributes, ReactNode } from 'react'
+import { cn, handleChangeCurrentPage, handleChangeItemPerPage } from '@/commons/utils'
 import {
   Pagination,
   PaginationContent,
@@ -10,30 +10,15 @@ import {
 } from '@/components/ui/pagination'
 import { Paginator } from '@/commons/types'
 import { Combobox } from '@/components/ui/combobox'
-import { Button } from '@/components/ui/button'
-import { PlusIcon } from 'lucide-react'
 
 type TableProps<T> = HTMLAttributes<HTMLTableElement> & {
   meta: Paginator<T>['meta']
+  empty?: ReactNode
 }
 
 function Table<T>({ className, ...props }: TableProps<T>) {
   if (!props.meta.total) {
-    return (
-      <div className="p-5">
-        <div className="flex items-center justify-center max-h-screen h-[40rem] border border-input rounded-md p-5">
-          <div className="">
-            <h2 className="text-xl text-center mt-5">No data found.</h2>
-            <div className="mt-5">
-              <Button variant="outline" size="sm">
-                <PlusIcon />
-                Créer un utilisateur
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
+    return props.empty ?? 'No data available'
   }
 
   return (

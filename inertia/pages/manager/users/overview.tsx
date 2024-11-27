@@ -8,13 +8,16 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import SidebarUserDetail from '@/pages/manager/users/components/sidebar_user_detail'
 
 import User from '#models/user'
 import { Paginator } from '@/commons/types'
 import { Searchbar } from '@/components/commons/searchbar'
 import { CreateUserDialog } from '@/pages/manager/users/components/create_user_dialog'
+import { Button } from '@/components/ui/button'
+import { CopyIcon, PlusIcon } from 'lucide-react'
+import { toast } from 'sonner'
 
 type Props = {
   users: Paginator<User>
@@ -22,6 +25,13 @@ type Props = {
 
 export default function UsersOverview(props: Props) {
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
+
+  async function onCopy(user: User) {
+    await navigator.clipboard.writeText(user.uid)
+    toast('Copied to the clipboard', {
+      icon: <CopyIcon className="size-4" />,
+    })
+  }
 
   return (
     <ManagerLayout
@@ -37,38 +47,83 @@ export default function UsersOverview(props: Props) {
             redirect="/manager/users/overview"
           />
 
-          <CreateUserDialog />
+          <CreateUserDialog trigger={<Button size="sm">New user</Button>} />
         </div>
       }
     >
-      <Table meta={props.users.meta}>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">ID</TableHead>
-            <TableHead>Identité</TableHead>
-            <TableHead>Type de compte</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody
-          data={props.users.data}
-          builder={(user) => (
-            <TableRow onClick={() => setSelectedUser(user)} key={user.id}>
-              <TableCell className="font-medium whitespace-nowrap !text-xs">{user.uid}</TableCell>
-              <TableCell>
-                {user.firstname} {user.lastname}
-              </TableCell>
-              <TableCell className="flex items-center gap-x-2">
-                <Badge variant="outline">{user.type}</Badge>
-                {!user.isActive && <Badge variant="destructive">Deactivate</Badge>}
-              </TableCell>
-              <TableCell className="text-right">Actions</TableCell>
+      <Fragment>
+        <div className="p-5 border-b">
+          <h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+            User accounts
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Manage your user accounts. You can create, update, delete, and view user accounts.
+          </p>
+        </div>
+        <Table meta={props.users.meta} empty={<EmptyData />}>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[100px]">ID</TableHead>
+              <TableHead className="w-[300px]">Identité</TableHead>
+              <TableHead>Type de compte</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
-          )}
-        />
-      </Table>
+          </TableHeader>
+          <TableBody
+            data={props.users.data}
+            builder={(user) => (
+              <TableRow key={user.id}>
+                <TableCell className="font-medium whitespace-nowrap !text-xs">
+                  <Badge onClick={() => onCopy(user)} variant="outline" className="cursor-pointer">
+                    {user.uid}
+                    <CopyIcon className="ml-2 -mr-1 size-2" />
+                  </Badge>
+                </TableCell>
+                <TableCell onClick={() => setSelectedUser(user)} className="cursor-pointer">
+                  {user.firstname} {user.lastname}
+                </TableCell>
+                <TableCell
+                  onClick={() => setSelectedUser(user)}
+                  className="flex items-center gap-x-2 cursor-pointer"
+                >
+                  <Badge variant="outline">{user.type}</Badge>
+                  {!user.isActive && <Badge variant="destructive">Deactivate</Badge>}
+                </TableCell>
+                <TableCell
+                  onClick={() => setSelectedUser(user)}
+                  className="text-right cursor-pointer"
+                >
+                  Actions
+                </TableCell>
+              </TableRow>
+            )}
+          />
+        </Table>
+      </Fragment>
 
       <SidebarUserDetail state={[selectedUser, setSelectedUser]} />
     </ManagerLayout>
+  )
+}
+
+function EmptyData() {
+  return (
+    <div className="p-5">
+      <div className="flex items-center justify-center max-h-screen h-[40rem] border border-input rounded-md p-5">
+        <div className="">
+          <h2 className="text-xl text-center mt-5">No data found.</h2>
+          <div className="mt-5">
+            <CreateUserDialog
+              trigger={
+                <Button variant="outline" size="sm">
+                  <PlusIcon />
+                  Créer un utilisateur
+                </Button>
+              }
+            />
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
