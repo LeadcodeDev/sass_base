@@ -6,25 +6,18 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet'
 import { State } from '@/commons/types'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
 import { useForm } from 'react-hook-form'
-import { Input } from '@/components/ui/input'
-import SelectBox from '@/components/ui/select'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import User from '#models/user'
-import { Button } from '@/components/ui/button'
 import { router } from '@inertiajs/react'
-import { Switch } from '@/components/ui/switch'
-import { DeleteButton } from '@/components/commons/delete_button'
 import { toast } from 'sonner'
 import { toastVariant } from '@/commons/utils'
+import {
+  UpdateUserFormSchema,
+  updateUserValidator,
+} from '@/pages/manager/users/validators/user_validators'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { UpdateUserForm } from '@/pages/manager/users/components/forms/update_user_form'
 
 type Props = {
   state: State<User | null>
@@ -32,11 +25,12 @@ type Props = {
 
 export default function SidebarUserDetail(props: Props) {
   const [selectedUser, setSelectedUser] = props.state
-  const form = useForm({
+  const form = useForm<UpdateUserFormSchema>({
+    resolver: zodResolver(updateUserValidator),
     values: {
-      firstname: selectedUser?.firstname,
-      lastname: selectedUser?.lastname,
-      email: selectedUser?.email,
+      firstname: selectedUser?.firstname ?? '',
+      lastname: selectedUser?.lastname ?? '',
+      email: selectedUser?.email ?? '',
       roles: selectedUser?.roles?.map((role) => role.id.toString()) ?? [],
       structure: [],
       type: selectedUser?.type as unknown as string,
@@ -44,8 +38,8 @@ export default function SidebarUserDetail(props: Props) {
     },
   })
 
-  function handleSubmit(data: { [key: string]: any }) {
-    router.put(`/manager/users/${selectedUser?.uid}`, data, {
+  function handleSubmit(values: UpdateUserFormSchema) {
+    router.put(`/manager/users/${selectedUser?.uid}`, values, {
       onSuccess: () => {
         setSelectedUser(null)
         toast.success('Success', {
@@ -58,7 +52,7 @@ export default function SidebarUserDetail(props: Props) {
           ...toastVariant.error,
           description: 'An error occurred while updating the user.',
         })
-      }
+      },
     })
   }
 
@@ -76,21 +70,6 @@ export default function SidebarUserDetail(props: Props) {
 
   const firstname = form.watch('firstname')
   const lastname = form.watch('lastname')
-
-  const frameworks = [
-    {
-      value: 'nuxt.js',
-      label: 'Nuxt.js',
-    },
-    {
-      value: 'remix',
-      label: 'Remix',
-    },
-    {
-      value: 'astro',
-      label: 'Astro',
-    },
-  ]
 
   return (
     <Sheet
@@ -118,159 +97,7 @@ export default function SidebarUserDetail(props: Props) {
               your data from our servers.
             </SheetDescription>
 
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(handleSubmit)}>
-                <div className="pt-5 flex flex-col gap-5">
-                  <FormField
-                    control={form.control}
-                    name="firstname"
-                    rules={{ required: 'Firstname is required' }}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Firstname</FormLabel>
-                        <FormControl>
-                          <Input placeholder="John" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="lastname"
-                    rules={{ required: 'Lastname is required' }}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Firstname</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Doe" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    rules={{ required: 'Email is required' }}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input placeholder="john.doe@foo.bar" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="isActive"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Switch
-                            labelBuilder={(checked) => (checked ? 'Active' : 'Inactive')}
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="type"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Account type</FormLabel>
-                        <FormControl>
-                          <SelectBox
-                            options={[
-                              { label: 'Staff', value: 'staff' },
-                              { label: 'Practitioner', value: 'practitioner' },
-                              { label: 'User', value: 'user' },
-                            ]}
-                            defaultValue={field.value}
-                            onChange={field.onChange}
-                            placeholder="Select type..."
-                            inputPlaceholder="Search type"
-                            emptyPlaceholder="No type found."
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="roles"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Roles</FormLabel>
-                        <FormControl>
-                          <SelectBox
-                            options={[{ label: 'Admin', value: 'admin' }]}
-                            defaultValue={field.value}
-                            onChange={field.onChange}
-                            placeholder="Select roles..."
-                            inputPlaceholder="Search roles"
-                            emptyPlaceholder="No role found."
-                            multiple
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="structure"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Structure</FormLabel>
-                        <FormControl>
-                          <SelectBox
-                            options={frameworks}
-                            defaultValue={field.value}
-                            onChange={field.onChange}
-                            placeholder="Select a framework..."
-                            inputPlaceholder="Search framework"
-                            emptyPlaceholder="No framework found."
-                            multiple
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <Button type="submit" size="sm" className="mt-5">
-                    Save
-                  </Button>
-                  <DeleteButton
-                    word="confirmation"
-                    onSubmit={handleDelete}
-                    variant="destructive"
-                    size="sm"
-                    className="mt-5"
-                  >
-                    Supprimer
-                  </DeleteButton>
-                </div>
-              </form>
-            </Form>
+            <UpdateUserForm form={form} onSubmit={handleSubmit} onDelete={handleDelete} />
           </div>
         </SheetHeader>
       </SheetContent>

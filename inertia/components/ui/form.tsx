@@ -12,6 +12,7 @@ import {
 } from 'react-hook-form'
 
 import { cn } from '@/commons/utils'
+import { usePage } from '@inertiajs/react'
 
 const Form = FormProvider
 
@@ -128,8 +129,13 @@ const FormMessage = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, children, ...props }, ref) => {
-  const { error, formMessageId } = useFormField()
-  const body = error ? String(error?.message) : children
+  const { props: routeProps } = usePage()
+  const { error, name, formMessageId } = useFormField()
+  const body = (routeProps.errors && routeProps.errors[name])
+    ? String(routeProps.errors[name][0])
+    : error
+      ? String(error?.message)
+      : children
 
   if (!body) {
     return null

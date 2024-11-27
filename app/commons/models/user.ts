@@ -4,12 +4,12 @@ import { compose } from '@adonisjs/core/helpers'
 import { BaseModel, column, beforeCreate, manyToMany, scope } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
-import { randomUUID } from 'node:crypto'
 import type { ManyToMany } from '@adonisjs/lucid/types/relations'
 import Role from '#models/role'
 import Permission from '#models/permission'
 import { searchValidator } from '#app/commons/validators/searchable'
 import { Infer } from '@vinejs/vine/types'
+import StringHelper from '@adonisjs/core/helpers/string'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -57,7 +57,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @beforeCreate()
   public static assignUuid(user: User) {
-    user.uid = randomUUID()
+    user.uid = StringHelper.generateRandom(10)
   }
 
   static search = scope((query, value: Infer<typeof searchValidator>['search']) => {

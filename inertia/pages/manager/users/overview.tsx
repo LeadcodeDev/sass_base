@@ -14,6 +14,7 @@ import SidebarUserDetail from '@/pages/manager/users/components/sidebar_user_det
 import User from '#models/user'
 import { Paginator } from '@/commons/types'
 import { Searchbar } from '@/components/commons/searchbar'
+import { CreateUserDialog } from '@/pages/manager/users/components/create_user_dialog'
 
 type Props = {
   users: Paginator<User>
@@ -28,12 +29,16 @@ export default function UsersOverview(props: Props) {
         { label: 'Manager', url: '/manager' },
         { label: 'Users overview', url: '/manager/users' },
       ]}
-      header={
-        <Searchbar
-          placeholder="Search for a user..."
-          searchKey="search"
-          redirect="/manager/users/overview"
-        />
+      trailing={
+        <div className="flex items-center justify-end gap-x-2">
+          <Searchbar
+            placeholder="Search for a user..."
+            searchKey="search"
+            redirect="/manager/users/overview"
+          />
+
+          <CreateUserDialog />
+        </div>
       }
     >
       <Table meta={props.users.meta}>
@@ -49,7 +54,7 @@ export default function UsersOverview(props: Props) {
           data={props.users.data}
           builder={(user) => (
             <TableRow onClick={() => setSelectedUser(user)} key={user.id}>
-              <TableCell className="font-medium">{user.uid}</TableCell>
+              <TableCell className="font-medium whitespace-nowrap !text-xs">{user.uid}</TableCell>
               <TableCell>
                 {user.firstname} {user.lastname}
               </TableCell>

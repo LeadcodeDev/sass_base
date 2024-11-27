@@ -12,9 +12,9 @@ export const createUserValidator = vine.compile(
         const match = await db.from('users').select('id').where('email', value).first()
         return !match
       }),
-    password: vine.string().trim().minLength(3),
+    password: vine.string().trim().minLength(3).confirmed(),
     type: vine.enum(UserType),
-    is_active: vine.boolean(),
+    isActive: vine.boolean(),
   })
 )
 

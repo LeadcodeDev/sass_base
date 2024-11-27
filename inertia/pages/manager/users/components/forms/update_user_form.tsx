@@ -1,0 +1,196 @@
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { Switch } from '@/components/ui/switch'
+import SelectBox from '@/components/ui/select'
+import { UseFormReturn } from 'react-hook-form'
+import { UpdateUserFormSchema } from '@/pages/manager/users/validators/user_validators'
+import { Button } from '@/components/ui/button'
+import { DeleteButton } from '@/components/commons/delete_button'
+
+type Props = {
+  form: UseFormReturn<UpdateUserFormSchema>
+  onSubmit: (data: UpdateUserFormSchema) => void
+  onDelete: () => void
+}
+
+export function UpdateUserForm(props: Props) {
+  const frameworks = [
+    {
+      value: 'nuxt.js',
+      label: 'Nuxt.js',
+    },
+    {
+      value: 'remix',
+      label: 'Remix',
+    },
+    {
+      value: 'astro',
+      label: 'Astro',
+    },
+  ]
+
+  return (
+    <Form {...props.form}>
+      <form onSubmit={props.form.handleSubmit(props.onSubmit)}>
+        <div className="pt-5 flex flex-col gap-5">
+          <FormField
+            control={props.form.control}
+            name="firstname"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Firstname</FormLabel>
+                <FormControl>
+                  <Input placeholder="John" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={props.form.control}
+            name="lastname"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Firstname</FormLabel>
+                <FormControl>
+                  <Input placeholder="Doe" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={props.form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input placeholder="john.doe@foo.bar" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={props.form.control}
+            name="isActive"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Account status</FormLabel>
+                <FormControl>
+                  <Switch
+                    labelBuilder={(checked) => (checked ? 'Active' : 'Inactive')}
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={props.form.control}
+            name="type"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Account type</FormLabel>
+                <FormControl>
+                  <SelectBox
+                    options={[
+                      { label: 'Staff', value: 'staff' },
+                      { label: 'Practitioner', value: 'practitioner' },
+                      { label: 'User', value: 'user' },
+                    ]}
+                    defaultValue={field.value}
+                    onChange={field.onChange}
+                    placeholder="Select type..."
+                    inputPlaceholder="Search type"
+                    emptyPlaceholder="No type found."
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={props.form.control}
+            name="roles"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Roles</FormLabel>
+                <FormControl>
+                  <SelectBox
+                    options={[{ label: 'Admin', value: 'admin' }]}
+                    defaultValue={field.value}
+                    onChange={field.onChange}
+                    placeholder="Select roles..."
+                    inputPlaceholder="Search roles"
+                    emptyPlaceholder="No role found."
+                    multiple
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={props.form.control}
+            name="structure"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Structure</FormLabel>
+                <FormControl>
+                  <SelectBox
+                    options={frameworks}
+                    defaultValue={field.value}
+                    onChange={field.onChange}
+                    placeholder="Select a framework..."
+                    inputPlaceholder="Search framework"
+                    emptyPlaceholder="No framework found."
+                    multiple
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <UserFormAction onDelete={props.onDelete} />
+      </form>
+    </Form>
+  )
+}
+
+function UserFormAction(props: { onDelete: () => void }) {
+  return (
+    <div className="flex items-center gap-2">
+      <Button type="submit" size="sm" className="mt-5">
+        Save
+      </Button>
+      <DeleteButton
+        word="confirmation"
+        onSubmit={props.onDelete}
+        variant="destructive"
+        size="sm"
+        className="mt-5"
+      >
+        Supprimer
+      </DeleteButton>
+    </div>
+  )
+}

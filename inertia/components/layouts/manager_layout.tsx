@@ -48,7 +48,7 @@ const links = [
 
 type Props = {
   breadcrumb?: { label: string; url?: string }[]
-  header?: ReactNode
+  trailing?: ReactNode
 }
 
 export function ManagerLayout(props: PropsWithChildren<Props>) {
@@ -86,9 +86,9 @@ export function ManagerLayout(props: PropsWithChildren<Props>) {
             </Fragment>
           )}
 
-          {props.header && (
+          {props.trailing && (
             <div className="flex-1 items-center w-full">
-              {props.header}
+              {props.trailing}
             </div>
           )}
         </header>

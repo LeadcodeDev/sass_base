@@ -31,7 +31,7 @@ interface SelectBoxProps {
 }
 
 const SelectBox = forwardRef<HTMLInputElement, SelectBoxProps>((props, ref) => {
-  const [currentValue, setCurrentValue] = useState<string | string[]>([])
+  const [currentValue, setCurrentValue] = useState<string | string[]>(props.defaultValue ?? [])
   const [searchTerm, setSearchTerm] = React.useState<string>('')
   const [isOpen, setIsOpen] = React.useState(false)
 
