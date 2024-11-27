@@ -7,7 +7,7 @@ export function cn(...classes: (string | undefined | null | false)[]): string {
 
 export function getCurrentParameters(source?: URLSearchParams): { [key: string]: string } {
   const queryParams = source ?? new URLSearchParams(window.location.search)
-  return queryParams.entries().reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
+  return Array.from(queryParams.entries()).reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
 }
 
 export function handleChangeItemPerPage(url: string, value: string | number) {
