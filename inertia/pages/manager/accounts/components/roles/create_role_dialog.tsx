@@ -30,6 +30,7 @@ export function CreateRoleDialog(props: Props) {
   const [open, setOpen] = useState(false)
   const permissions = usePermission({
     limit: 9999999,
+    skip: !open,
   })
 
   const form = useForm<CreateRoleFormSchema>({

@@ -7,7 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.bigIncrements('id').primary()
       table.bigint('role_id').references('id').inTable('roles')
-      table.bigint('user_id').references('id').inTable('roles')
+      table.bigint('user_id').references('id').inTable('users')
     })
   }
 

@@ -11,9 +11,11 @@ import { Switch } from '@/components/ui/switch'
 import SelectBox from '@/components/ui/select'
 import { UseFormReturn } from 'react-hook-form'
 import { CreateUserFormSchema } from '@/pages/manager/accounts/validators/user_validators'
+import Role from '#models/role'
 
 type Props = {
   form: UseFormReturn<CreateUserFormSchema>
+  roles: Role[]
   onSubmit: (data: CreateUserFormSchema) => void
   id?: string
 }
@@ -148,7 +150,10 @@ export function CreateUserForm(props: Props) {
                     <FormLabel>Roles</FormLabel>
                     <FormControl>
                       <SelectBox
-                        options={[{ label: 'Admin', value: 'admin' }]}
+                        options={props.roles.map((role) => ({
+                          label: role.name,
+                          value: role.id.toString(),
+                        }))}
                         defaultValue={field.value}
                         onChange={field.onChange}
                         placeholder="Select roles..."

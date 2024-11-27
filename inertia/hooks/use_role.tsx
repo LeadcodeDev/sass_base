@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
-import Permission from '#models/permission'
+import Role from '#models/role'
 
 type Props = {
   limit: number
   skip?: boolean
 }
 
-export function usePermission(props: Props) {
-  const [state, setState] = useState<Permission[]>([])
+export function useRole(props: Props) {
+  const [state, setState] = useState<Role[]>([])
 
   useEffect(() => {
     if (props.skip) return
@@ -15,7 +15,7 @@ export function usePermission(props: Props) {
     const queryParam = new URLSearchParams()
     queryParam.append('limit', props.limit.toString())
 
-    fetch(`/manager/permissions/overview?${queryParam}`, {
+    fetch(`/manager/roles/overview?${queryParam}`, {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',

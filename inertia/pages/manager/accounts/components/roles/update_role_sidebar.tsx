@@ -29,6 +29,7 @@ export default function UpdatePermissionSidebar(props: Props) {
   const [selectedRole, setSelectedRole] = props.state
   const permissions = usePermission({
     limit: 9999999,
+    skip: !!selectedRole,
   })
 
   const form = useForm<UpdateRoleFormSchema>({
@@ -89,12 +90,14 @@ export default function UpdatePermissionSidebar(props: Props) {
             data from our servers.
           </SheetDescription>
         </SheetHeader>
-        <RoleForm
-          form={form}
-          permissions={permissions}
-          onSubmit={handleSubmit}
-          actions={<PermissionFormAction onDelete={handleDelete} />}
-        />
+        <div className="mt-5">
+          <RoleForm
+            form={form}
+            permissions={permissions}
+            onSubmit={handleSubmit}
+            actions={<PermissionFormAction onDelete={handleDelete} />}
+          />
+        </div>
       </SheetContent>
     </Sheet>
   )

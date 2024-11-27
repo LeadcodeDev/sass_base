@@ -13,9 +13,11 @@ import { UseFormReturn } from 'react-hook-form'
 import { UpdateUserFormSchema } from '@/pages/manager/accounts/validators/user_validators'
 import { Button } from '@/components/ui/button'
 import { DeleteButton } from '@/components/commons/delete_button'
+import Role from '#models/role'
 
 type Props = {
   form: UseFormReturn<UpdateUserFormSchema>
+  roles: Role[]
   onSubmit: (data: UpdateUserFormSchema) => void
   onDelete: () => void
 }
@@ -134,7 +136,10 @@ export function UpdateUserForm(props: Props) {
                 <FormLabel>Roles</FormLabel>
                 <FormControl>
                   <SelectBox
-                    options={[{ label: 'Admin', value: 'admin' }]}
+                    options={props.roles.map((role) => ({
+                      label: role.name,
+                      value: role.id.toString(),
+                    }))}
                     defaultValue={field.value}
                     onChange={field.onChange}
                     placeholder="Select roles..."

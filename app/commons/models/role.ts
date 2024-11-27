@@ -36,8 +36,8 @@ export default class Role extends BaseModel {
   declare updatedAt: DateTime
 
   @beforeCreate()
-  public static assignUuid(user: User) {
-    user.uid = StringHelper.generateRandom(10)
+  public static assignUuid(role: Role) {
+    role.uid = StringHelper.generateRandom(10)
   }
 
   static search = scope(

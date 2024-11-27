@@ -20,6 +20,7 @@ import { toast } from 'sonner'
 import { toastVariant } from '@/commons/utils'
 import { ReactElement, useState } from 'react'
 import { CreateUserForm } from '@/pages/manager/accounts/components/users/forms/create_user_form'
+import { useRole } from '@/hooks/use_role'
 
 type Props = {
   trigger: ReactElement
@@ -27,6 +28,11 @@ type Props = {
 
 export function CreateUserDialog(props: Props) {
   const [open, setOpen] = useState(false)
+  const roles = useRole({
+    limit: 9999999,
+    skip: !open,
+  })
+
   const form = useForm<CreateUserFormSchema>({
     resolver: zodResolver(createUserValidator),
     defaultValues: {
@@ -69,7 +75,7 @@ export function CreateUserDialog(props: Props) {
           <DialogDescription>Fill in the form to create a new user.</DialogDescription>
         </DialogHeader>
 
-        <CreateUserForm id="form" form={form} onSubmit={handleSubmit} />
+        <CreateUserForm id="form" form={form} roles={roles} onSubmit={handleSubmit} />
 
         <DialogFooter className="flex items-center sm:justify-start">
           <DialogClose asChild>

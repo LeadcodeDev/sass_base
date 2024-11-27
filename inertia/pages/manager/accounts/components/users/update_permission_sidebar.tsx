@@ -18,6 +18,7 @@ import {
 } from '@/pages/manager/accounts/validators/user_validators'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { UpdateUserForm } from '@/pages/manager/accounts/components/users/forms/update_user_form'
+import { useRole } from '@/hooks/use_role'
 
 type Props = {
   state: State<User | null>
@@ -25,6 +26,11 @@ type Props = {
 
 export default function UpdateUserSidebar(props: Props) {
   const [selectedUser, setSelectedUser] = props.state
+  const roles = useRole({
+    limit: 9999999,
+    skip: !!selectedUser,
+  })
+
   const form = useForm<UpdateUserFormSchema>({
     resolver: zodResolver(updateUserValidator),
     values: {
@@ -97,7 +103,12 @@ export default function UpdateUserSidebar(props: Props) {
               your data from our servers.
             </SheetDescription>
 
-            <UpdateUserForm form={form} onSubmit={handleSubmit} onDelete={handleDelete} />
+            <UpdateUserForm
+              form={form}
+              roles={roles}
+              onSubmit={handleSubmit}
+              onDelete={handleDelete}
+            />
           </div>
         </SheetHeader>
       </SheetContent>

@@ -12,7 +12,13 @@ export default class UsersController {
 
     const users = await User.query()
       .withScopes((scopes) => scopes.search(search, type, isActive))
+      .preload('roles')
       .paginate(page ?? 1, limit ?? 20)
+
+    const contentType = request.accepts(['html', 'json'])
+    if (contentType === 'json') {
+      return users
+    }
 
     return inertia.render('manager/accounts/users_overview', { users })
   }
@@ -24,9 +30,13 @@ export default class UsersController {
 
   async store({ request, response }: HttpContext) {
     const data = await request.validateUsing(createUserValidator)
-    await User.create(data)
+    const user = await User.create(data)
 
-    return response.redirect().toRoute('manager.accounts.index')
+    if (data.roles) {
+      await user.related('roles').sync(data.roles)
+    }
+
+    return response.redirect().toRoute('manager.users.index')
   }
 
   async show({ inertia, params }: HttpContext) {
@@ -40,13 +50,17 @@ export default class UsersController {
     const user = await User.findByOrFail('uid', params.uid)
 
     await user.merge(data).save()
-    return response.redirect().toRoute('manager.accounts.index')
+
+    if (data.roles) {
+      await user.related('roles').sync(data.roles)
+    }
+    return response.redirect().toRoute('manager.users.index')
   }
 
   async delete({ response, params }: HttpContext) {
     const user = await User.findByOrFail('uid', params.uid)
 
     await user.delete()
-    return response.redirect().toRoute('manager.accounts.index')
+    return response.redirect().toRoute('manager.users.index')
   }
 }

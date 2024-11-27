@@ -17,8 +17,8 @@ export default class RolesController {
       .preload('users')
       .paginate(page ?? 1, limit ?? 20)
 
-    const contentType = request.header('Content-Type')
-    if (contentType === 'application/json') {
+    const contentType = request.accepts(['html', 'json'])
+    if (contentType === 'json') {
       return roles
     }
 

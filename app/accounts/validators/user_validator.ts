@@ -24,6 +24,7 @@ export const createUserValidator = vine.compile(
     password: vine.string().trim().minLength(3).confirmed(),
     type: vine.enum(UserType),
     isActive: vine.boolean(),
+    roles: vine.array(vine.number()).optional(),
   })
 )
 
@@ -47,5 +48,6 @@ export const updateUserValidator = (uid: string) =>
         .optional(),
       type: vine.enum(UserType).optional(),
       isActive: vine.boolean().optional(),
+      roles: vine.array(vine.number()).optional(),
     })
   )
