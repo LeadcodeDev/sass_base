@@ -4,6 +4,7 @@ import path from 'node:path'
 import sharp from 'sharp'
 import * as fs from 'node:fs'
 import { UploadedFile } from '#app/commons/types/index'
+import drive from '@adonisjs/drive/services/main'
 
 export default class AssetsService {
   async convertAndUpload(file: UploadedFile) {
@@ -19,9 +20,11 @@ export default class AssetsService {
         .webp({ quality: 80 })
         .toFile(webpFilePath)
 
-      fs.unlink(app.tmpPath() + `/${key}.${file.extname}`, (err) => {
-        if (err) throw err
-      })
+      const disk = drive.use()
+      await disk.put(`${key}.webp`, path.join(app.tmpPath()))
+
+      fs.unlinkSync(app.tmpPath() + `/${key}.${file.extname}`)
+      fs.unlinkSync(app.tmpPath() + `/${key}.webp`)
     } catch (e) {
       console.error(e)
     }

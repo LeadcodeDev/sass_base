@@ -9,16 +9,14 @@ const driveConfig = defineConfig({
    * services each using the same or a different driver.
    */
   services: {
-    r2: services.s3({
+    s3: services.s3({
       credentials: {
-        accessKeyId: env.get('R2_KEY'),
-        secretAccessKey: env.get('R2_SECRET'),
+        accessKeyId: env.get('AWS_ACCESS_KEY_ID'),
+        secretAccessKey: env.get('AWS_SECRET_ACCESS_KEY'),
       },
-      cdnUrl: env.get('R2_CDN'),
-      region: 'auto',
-      bucket: env.get('R2_BUCKET'),
-      endpoint: env.get('R2_ENDPOINT'),
-      visibility: 'public',
+      region: env.get('AWS_REGION'),
+      bucket: env.get('S3_BUCKET'),
+      visibility: 'private',
     }),
   },
 })
