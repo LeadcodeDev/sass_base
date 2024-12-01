@@ -20,6 +20,7 @@ export const createUserValidator = vine.compile(
     type: vine.enum(UserType),
     status: vine.enum(UserStatus),
     roles: vine.array(vine.number()).optional(),
+    permissions: vine.array(vine.number()).optional(),
     avatar: vine
       .file({
         size: '2mb',
@@ -50,6 +51,7 @@ export const updateUserValidator = (uid: string) =>
       type: vine.enum(UserType).optional(),
       status: vine.enum(UserStatus).optional(),
       roles: vine.array(vine.number()).optional(),
+      permissions: vine.array(vine.number()).optional(),
       avatar: vine
         .file({
           size: '2mb',

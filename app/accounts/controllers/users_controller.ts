@@ -39,6 +39,10 @@ export default class UsersController {
       avatar: data.avatar ? await this.assetsService.convertAndUpload(data.avatar) : null,
     })
 
+    if (data.permissions) {
+      await user.related('permissions').sync(data.permissions)
+    }
+
     if (data.roles) {
       await user.related('roles').sync(data.roles)
     }
@@ -61,6 +65,10 @@ export default class UsersController {
         avatar: data.avatar ? await this.assetsService.convertAndUpload(data.avatar) : user.avatar,
       })
       .save()
+
+    if (data.permissions) {
+      await user.related('permissions').sync(data.permissions)
+    }
 
     if (data.roles) {
       await user.related('roles').sync(data.roles)
