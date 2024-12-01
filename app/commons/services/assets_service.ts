@@ -23,12 +23,9 @@ export default class AssetsService {
       const disk = drive.use()
       await disk.put(`${key}.webp`, path.join(app.tmpPath()))
 
-      fs.unlinkSync(app.tmpPath() + `/${key}.${file.extname}`)
-      fs.unlinkSync(app.tmpPath() + `/${key}.webp`)
-      fs.rmdirSync(app.tmpPath())
+      fs.rmSync(app.tmpPath(), { recursive: true })
     } catch (e) {
-      fs.unlinkSync(app.tmpPath() + `/${key}.${file.extname}`)
-      fs.rmdirSync(app.tmpPath())
+      fs.rmSync(app.tmpPath(), { recursive: true })
       console.error(e)
     }
 
