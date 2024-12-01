@@ -24,7 +24,7 @@ export const createUserValidator = vine.compile(
     avatar: vine
       .file({
         size: '2mb',
-        extnames: ['jpg', 'png', 'pdf'],
+        extnames: ['jpg', 'png'],
       })
       .optional(),
   })
@@ -55,7 +55,7 @@ export const updateUserValidator = (uid: string) =>
       avatar: vine
         .file({
           size: '2mb',
-          extnames: ['jpg', 'png', 'pdf'],
+          extnames: ['jpg', 'png'],
         })
         .optional(),
     })
