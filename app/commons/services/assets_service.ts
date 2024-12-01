@@ -10,11 +10,11 @@ export default class AssetsService {
   async convertAndUpload(file: UploadedFile) {
     const key = `${StringHelper.generateRandom(10)}`
 
-    await file.move(app.tmpPath(), {
-      name: `${key}.${file.extname}`,
-    })
-
     try {
+      await file.move(app.tmpPath(), {
+        name: `${key}.${file.extname}`,
+      })
+
       const webpFilePath = path.join(app.tmpPath(), `${key}.webp`)
       await sharp(app.tmpPath() + `/${key}.${file.extname}`)
         .webp({ quality: 80 })
