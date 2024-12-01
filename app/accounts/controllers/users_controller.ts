@@ -5,8 +5,13 @@ import {
   userSearchValidator,
 } from '#app/accounts/validators/user_validator'
 import User from '#models/user'
+import { inject } from '@adonisjs/core'
+import AssetsService from '#app/commons/services/assets_service'
 
+@inject()
 export default class UsersController {
+  constructor(protected assetsService: AssetsService) {}
+
   async index({ inertia, request }: HttpContext) {
     const { page, limit, search, type, isActive } = await request.validateUsing(userSearchValidator)
 
@@ -24,13 +29,15 @@ export default class UsersController {
   }
 
   async create({ inertia }: HttpContext) {
-    //todo: Modifying the route path
     return inertia.render('accounts/create')
   }
 
   async store({ request, response }: HttpContext) {
     const data = await request.validateUsing(createUserValidator)
-    const user = await User.create(data)
+    const user = await User.create({
+      ...data,
+      avatar: data.avatar ? await this.assetsService.convertAndUpload(data.avatar) : null,
+    })
 
     if (data.roles) {
       await user.related('roles').sync(data.roles)
@@ -41,7 +48,6 @@ export default class UsersController {
 
   async show({ inertia, params }: HttpContext) {
     const user = await User.query().where('uid', params.uid).firstOrFail()
-    //todo: Modifying the route path
     return inertia.render('accounts/show', { user })
   }
 
@@ -49,7 +55,12 @@ export default class UsersController {
     const data = await request.validateUsing(updateUserValidator(params.uid))
     const user = await User.findByOrFail('uid', params.uid)
 
-    await user.merge(data).save()
+    await user
+      .merge({
+        ...data,
+        avatar: data.avatar ? await this.assetsService.convertAndUpload(data.avatar) : user.avatar,
+      })
+      .save()
 
     if (data.roles) {
       await user.related('roles').sync(data.roles)

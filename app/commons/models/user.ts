@@ -42,7 +42,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare status: UserStatus
 
   @column()
-  declare avatar: string
+  declare avatar: string | null
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

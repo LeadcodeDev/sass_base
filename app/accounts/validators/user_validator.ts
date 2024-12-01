@@ -1,6 +1,7 @@
 import vine from '@vinejs/vine'
-import { UserType } from '#models/user'
+import { UserStatus, UserType } from '#models/user'
 import { searchComposable } from '#app/commons/validators/searchable'
+import { unique } from '#app/commons/validators/helpers/db'
 
 export const userSearchValidator = vine.compile(
   vine.object({
@@ -14,17 +15,17 @@ export const createUserValidator = vine.compile(
   vine.object({
     firstname: vine.string().trim().minLength(3),
     lastname: vine.string().trim().minLength(3),
-    email: vine
-      .string()
-      .email()
-      .unique(async (db, value) => {
-        const match = await db.from('users').select('id').where('email', value).first()
-        return !match
-      }),
+    email: vine.string().email().unique(unique('users', 'email')),
     password: vine.string().trim().minLength(3).confirmed(),
     type: vine.enum(UserType),
-    isActive: vine.boolean(),
+    status: vine.enum(UserStatus),
     roles: vine.array(vine.number()).optional(),
+    avatar: vine
+      .file({
+        size: '2mb',
+        extnames: ['jpg', 'png', 'pdf'],
+      })
+      .optional(),
   })
 )
 
@@ -47,7 +48,13 @@ export const updateUserValidator = (uid: string) =>
         })
         .optional(),
       type: vine.enum(UserType).optional(),
-      isActive: vine.boolean().optional(),
+      status: vine.enum(UserStatus).optional(),
       roles: vine.array(vine.number()).optional(),
+      avatar: vine
+        .file({
+          size: '2mb',
+          extnames: ['jpg', 'png', 'pdf'],
+        })
+        .optional(),
     })
   )
