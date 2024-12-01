@@ -25,7 +25,10 @@ export default class AssetsService {
 
       fs.unlinkSync(app.tmpPath() + `/${key}.${file.extname}`)
       fs.unlinkSync(app.tmpPath() + `/${key}.webp`)
+      fs.rmdirSync(app.tmpPath())
     } catch (e) {
+      fs.unlinkSync(app.tmpPath() + `/${key}.${file.extname}`)
+      fs.rmdirSync(app.tmpPath())
       console.error(e)
     }
 
