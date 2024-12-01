@@ -1,6 +1,6 @@
 export type UploadedFile = {
   clientName: string
-  extname: string
+  extname?: string
   fileName: string
   tmpPath?: string
   isValid: boolean
