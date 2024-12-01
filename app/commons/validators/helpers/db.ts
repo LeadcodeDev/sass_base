@@ -5,7 +5,7 @@ type DbOptions = {
   caseInsensitive: boolean
 }
 
-const query = (db: Database, table: string, column: string, value: string, options?: DbOptions) => {
+function query(db: Database, table: string, column: string, value: string, options?: DbOptions) {
   return db
     .from(table)
     .select('id')
@@ -16,9 +16,9 @@ const query = (db: Database, table: string, column: string, value: string, optio
     )
 }
 
-export const unique = (table: string, column: string, options?: DbOptions) => {
+export function unique(table: string, column: string, options?: DbOptions) {
   return async (db: Database, value: string, _field: FieldContext) => {
     const result = await query(db, table, column, value, options)
-    return result.length ? false : true
+    return !result.length
   }
 }
