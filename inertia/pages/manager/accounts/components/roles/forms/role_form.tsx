@@ -20,6 +20,7 @@ type RoleFormSchema = CreateRoleFormSchema | UpdateRoleFormSchema
 type Props = {
   form: UseFormReturn<RoleFormSchema>
   permissions: Permission[]
+  canBeUsed: boolean
   onSubmit: (data: RoleFormSchema) => void
   actions?: ReactNode
   id?: string
@@ -37,7 +38,7 @@ export function RoleForm(props: Props) {
               <FormItem className="flex-1">
                 <FormLabel>Label</FormLabel>
                 <FormControl>
-                  <Input placeholder="Role label" {...field} />
+                  <Input placeholder="Role label" disabled={!props.canBeUsed} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -54,6 +55,7 @@ export function RoleForm(props: Props) {
                   <Textarea
                     placeholder="Explain what this role does"
                     className="resize-none"
+                    disabled={!props.canBeUsed}
                     {...field}
                   />
                 </FormControl>
@@ -70,6 +72,7 @@ export function RoleForm(props: Props) {
                 <FormLabel>Permissions</FormLabel>
                 <FormControl>
                   <SelectBox
+                    disabled={!props.canBeUsed}
                     options={props.permissions.map((permission) => ({
                       label: permission.label,
                       value: permission.id.toString(),
@@ -95,6 +98,7 @@ export function RoleForm(props: Props) {
                 <FormLabel>Admin only</FormLabel>
                 <FormControl>
                   <Switch
+                    disabled={!props.canBeUsed}
                     labelBuilder={(checked) => (checked ? 'Active' : 'Inactive')}
                     checked={field.value}
                     onCheckedChange={field.onChange}

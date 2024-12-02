@@ -22,12 +22,15 @@ import {
 import { RoleForm } from '@/pages/manager/accounts/components/roles/forms/role_form'
 import { usePermission } from '@/hooks/use_permission'
 import Protected from '@/components/commons/protected'
+import { useUserPermissions } from '@/hooks/use_user'
 
 type Props = {
   trigger: ReactElement
 }
 
 export function CreateRoleDialog(props: Props) {
+  const canBeUsed = useUserPermissions('manager:roles:store')
+
   const [open, setOpen] = useState(false)
   const permissions = usePermission({
     limit: 9999999,
@@ -71,7 +74,7 @@ export function CreateRoleDialog(props: Props) {
           <DialogDescription>Fill in the form to create a new role.</DialogDescription>
         </DialogHeader>
 
-        <RoleForm id="form" form={form} permissions={permissions} onSubmit={handleSubmit} />
+        <RoleForm id="form" form={form} canBeUsed={canBeUsed} permissions={permissions} onSubmit={handleSubmit} />
 
         <DialogFooter className="flex items-center sm:justify-start">
           <DialogClose asChild>

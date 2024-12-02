@@ -20,7 +20,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { UpdateUserForm } from '@/pages/manager/accounts/components/users/forms/update_user_form'
 import { useRole } from '@/hooks/use_role'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useUserConnexions } from '@/hooks/use_user'
+import { useUserConnexions, useUserPermissions } from '@/hooks/use_user'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { AccessTokenDbColumns } from '@adonisjs/auth/types/access_tokens'
 import { Badge } from '@/components/ui/badge'
@@ -32,6 +32,8 @@ type Props = {
 }
 
 export default function UpdateUserSidebar(props: Props) {
+  const canBeUsed = useUserPermissions('manager:users:update')
+
   const [selectedUser, setSelectedUser] = props.state
   const roles = useRole({
     limit: 9999999,
@@ -144,6 +146,7 @@ export default function UpdateUserSidebar(props: Props) {
                   <UpdateUserForm
                     form={form}
                     roles={roles}
+                    canBeUsed={canBeUsed}
                     onSubmit={handleSubmit}
                     onDelete={handleDelete}
                   />

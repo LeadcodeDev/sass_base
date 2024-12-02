@@ -23,12 +23,15 @@ import { CreateUserForm } from '@/pages/manager/accounts/components/users/forms/
 import { useRole } from '@/hooks/use_role'
 import { UserStatus } from '@/commons/types'
 import Protected from '@/components/commons/protected'
+import { useUserPermissions } from '@/hooks/use_user'
 
 type Props = {
   trigger: ReactElement
 }
 
 export function CreateUserDialog(props: Props) {
+  const canBeUsed = useUserPermissions('manager:users:store')
+
   const [open, setOpen] = useState(false)
   const roles = useRole({
     limit: 9999999,
@@ -78,7 +81,13 @@ export function CreateUserDialog(props: Props) {
           <DialogDescription>Fill in the form to create a new user.</DialogDescription>
         </DialogHeader>
 
-        <CreateUserForm id="form" form={form} roles={roles} onSubmit={handleSubmit} />
+        <CreateUserForm
+          id="form"
+          form={form}
+          canBeUsed={canBeUsed}
+          roles={roles}
+          onSubmit={handleSubmit}
+        />
 
         <DialogFooter className="flex items-center sm:justify-start">
           <DialogClose asChild>

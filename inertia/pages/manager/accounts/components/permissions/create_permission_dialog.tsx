@@ -21,12 +21,15 @@ import {
 } from '@/pages/manager/accounts/validators/permission_validators'
 import { PermissionForm } from '@/pages/manager/accounts/components/permissions/forms/permission_form'
 import Protected from '@/components/commons/protected'
+import { useUserPermissions } from '@/hooks/use_user'
 
 type Props = {
   trigger: ReactElement
 }
 
 export function CreatePermissionDialog(props: Props) {
+  const canBeUsed = useUserPermissions('manager:permissions:store')
+
   const [open, setOpen] = useState(false)
   const form = useForm<CreatePermissionFormSchema>({
     resolver: zodResolver(createPermissionValidator),
@@ -65,7 +68,7 @@ export function CreatePermissionDialog(props: Props) {
           <DialogDescription>Fill in the form to create a new permission.</DialogDescription>
         </DialogHeader>
 
-        <PermissionForm id="form" form={form} onSubmit={handleSubmit} />
+        <PermissionForm id="form" form={form} canBeUsed={canBeUsed} onSubmit={handleSubmit} />
 
         <DialogFooter className="flex items-center sm:justify-start">
           <DialogClose asChild>

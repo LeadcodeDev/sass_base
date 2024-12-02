@@ -19,6 +19,7 @@ import Protected from '@/components/commons/protected'
 type Props = {
   form: UseFormReturn<UpdateUserFormSchema>
   roles: Role[]
+  canBeUsed: boolean
   onSubmit: (data: UpdateUserFormSchema) => void
   onDelete: () => void
 }
@@ -50,7 +51,7 @@ export function UpdateUserForm(props: Props) {
               <FormItem>
                 <FormLabel>Firstname</FormLabel>
                 <FormControl>
-                  <Input placeholder="John" {...field} />
+                  <Input placeholder="John" disabled={!props.canBeUsed} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -64,7 +65,7 @@ export function UpdateUserForm(props: Props) {
               <FormItem>
                 <FormLabel>Firstname</FormLabel>
                 <FormControl>
-                  <Input placeholder="Doe" {...field} />
+                  <Input placeholder="Doe" disabled={!props.canBeUsed} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -78,7 +79,7 @@ export function UpdateUserForm(props: Props) {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="john.doe@foo.bar" {...field} />
+                  <Input placeholder="john.doe@foo.bar" disabled={!props.canBeUsed} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -102,6 +103,7 @@ export function UpdateUserForm(props: Props) {
                     placeholder="Select status..."
                     inputPlaceholder="Search status"
                     emptyPlaceholder="No status found."
+                    disabled={!props.canBeUsed}
                   />
                 </FormControl>
                 <FormMessage />
@@ -127,6 +129,7 @@ export function UpdateUserForm(props: Props) {
                     placeholder="Select type..."
                     inputPlaceholder="Search type"
                     emptyPlaceholder="No type found."
+                    disabled={!props.canBeUsed}
                   />
                 </FormControl>
                 <FormMessage />
@@ -142,6 +145,7 @@ export function UpdateUserForm(props: Props) {
                 <FormLabel>Roles</FormLabel>
                 <FormControl>
                   <SelectBox
+                    disabled={!props.canBeUsed}
                     options={props.roles.map((role) => ({
                       label: role.name,
                       value: role.id.toString(),
@@ -167,6 +171,7 @@ export function UpdateUserForm(props: Props) {
                 <FormLabel>Structure</FormLabel>
                 <FormControl>
                   <SelectBox
+                    disabled={!props.canBeUsed}
                     options={frameworks}
                     defaultValue={field.value}
                     onChange={field.onChange}

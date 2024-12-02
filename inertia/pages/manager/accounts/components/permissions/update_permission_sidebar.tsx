@@ -20,12 +20,15 @@ import { PermissionForm } from '@/pages/manager/accounts/components/permissions/
 import { Button } from '@/components/ui/button'
 import { DeleteButton } from '@/components/commons/delete_button'
 import Protected from '@/components/commons/protected'
+import { useUserPermissions } from '@/hooks/use_user'
 
 type Props = {
   state: State<Permission | null>
 }
 
 export default function UpdatePermissionSidebar(props: Props) {
+  const canBeUsed = useUserPermissions('manager:permissions:update')
+
   const [selectedPermission, setSelectedPermission] = props.state
   const form = useForm<UpdatePermissionFormSchema>({
     resolver: zodResolver(updatePermissionValidator),
@@ -88,6 +91,7 @@ export default function UpdatePermissionSidebar(props: Props) {
         <PermissionForm
           form={form}
           onSubmit={handleSubmit}
+          canBeUsed={canBeUsed}
           actions={
             <PermissionFormAction
               onDelete={handleDelete}
