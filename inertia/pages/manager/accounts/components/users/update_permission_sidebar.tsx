@@ -5,7 +5,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from '@/components/ui/sheet'
-import { State } from '@/commons/types'
+import { State, UserStatus } from '@/commons/types'
 import { useForm } from 'react-hook-form'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import User from '#models/user'
@@ -40,7 +40,7 @@ export default function UpdateUserSidebar(props: Props) {
       roles: selectedUser?.roles?.map((role) => role.id.toString()) ?? [],
       structure: [],
       type: selectedUser?.type as unknown as string,
-      isActive: Boolean(selectedUser?.isActive),
+      status: selectedUser?.status ?? UserStatus.pending,
     },
   })
 

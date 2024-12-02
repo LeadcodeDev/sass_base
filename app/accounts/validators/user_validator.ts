@@ -7,7 +7,7 @@ export const userSearchValidator = vine.compile(
   vine.object({
     ...searchComposable.getProperties(),
     type: vine.enum(UserType).optional(),
-    isActive: vine.boolean().optional(),
+    status: vine.enum(UserStatus).optional(),
   })
 )
 

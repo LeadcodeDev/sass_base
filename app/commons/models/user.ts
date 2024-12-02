@@ -68,7 +68,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
       query,
       search: Infer<typeof userSearchValidator>['search'],
       type: Infer<typeof userSearchValidator>['type'],
-      isActive: Infer<typeof userSearchValidator>['isActive']
+      status: Infer<typeof userSearchValidator>['status']
     ) => {
       query.if(search, (builder) => {
         const columns = ['firstname', 'lastname', 'email', 'uid']
@@ -78,7 +78,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
       })
 
       query.if(type, (builder) => builder.andWhere('type', type!))
-      query.if(isActive !== undefined, (builder) => builder.andWhere('is_active', isActive!))
+      query.if(status !== undefined, (builder) => builder.andWhere('status', status!))
     }
   )
 }
@@ -90,7 +90,7 @@ export enum UserType {
 }
 
 export enum UserStatus {
-  pending,
-  verified,
-  disabled,
+  pending = 'pending',
+  verified = 'verified',
+  disabled = 'disabled',
 }

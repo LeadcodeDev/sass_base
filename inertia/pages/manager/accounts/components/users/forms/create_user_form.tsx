@@ -7,11 +7,11 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Switch } from '@/components/ui/switch'
 import SelectBox from '@/components/ui/select'
 import { UseFormReturn } from 'react-hook-form'
 import { CreateUserFormSchema } from '@/pages/manager/accounts/validators/user_validators'
 import Role from '#models/role'
+import { UserStatus } from '@/commons/types'
 
 type Props = {
   form: UseFormReturn<CreateUserFormSchema>
@@ -60,7 +60,7 @@ export function CreateUserForm(props: Props) {
               name="lastname"
               render={({ field }) => (
                 <FormItem className="flex-1">
-                  <FormLabel>Firstname</FormLabel>
+                  <FormLabel>Lastname</FormLabel>
                   <FormControl>
                     <Input placeholder="Doe" {...field} />
                   </FormControl>
@@ -168,19 +168,23 @@ export function CreateUserForm(props: Props) {
               />
             </div>
           </div>
-
           <FormField
             control={props.form.control}
-            name="isActive"
+            name="status"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Account status</FormLabel>
                 <FormControl>
-                  <Switch
-                    labelBuilder={(checked) => (checked ? 'Active' : 'Inactive')}
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                    {...field}
+                  <SelectBox
+                    options={Object.entries(UserStatus).map(([label, value]) => ({
+                      label: label,
+                      value: value,
+                    }))}
+                    defaultValue={field.value}
+                    onChange={field.onChange}
+                    placeholder="Select status..."
+                    inputPlaceholder="Search status"
+                    emptyPlaceholder="No status found."
                   />
                 </FormControl>
                 <FormMessage />

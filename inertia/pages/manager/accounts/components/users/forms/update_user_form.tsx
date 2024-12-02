@@ -7,13 +7,13 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Switch } from '@/components/ui/switch'
 import SelectBox from '@/components/ui/select'
 import { UseFormReturn } from 'react-hook-form'
 import { UpdateUserFormSchema } from '@/pages/manager/accounts/validators/user_validators'
 import { Button } from '@/components/ui/button'
 import { DeleteButton } from '@/components/commons/delete_button'
 import Role from '#models/role'
+import { UserStatus } from '@/commons/types'
 
 type Props = {
   form: UseFormReturn<UpdateUserFormSchema>
@@ -86,16 +86,22 @@ export function UpdateUserForm(props: Props) {
 
           <FormField
             control={props.form.control}
-            name="isActive"
+            name="status"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Account status</FormLabel>
                 <FormControl>
-                  <Switch
-                    labelBuilder={(checked) => (checked ? 'Active' : 'Inactive')}
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                    {...field}
+                  <SelectBox
+                    options={Object.entries(UserStatus).map(([label, value]) => ({
+                      label: label,
+                      value: value,
+                    }))}
+                    defaultValue={field.value}
+                    onChange={field.onChange}
+                    placeholder="Select roles..."
+                    inputPlaceholder="Search roles"
+                    emptyPlaceholder="No role found."
+                    multiple
                   />
                 </FormControl>
                 <FormMessage />

@@ -10,7 +10,6 @@ export default class SetAuthorizationHeaderMiddleware {
       ctx.request.headers().authorization = `Bearer ${token}`
     }
 
-    const output = await next()
-    return output
+    return await next()
   }
 }

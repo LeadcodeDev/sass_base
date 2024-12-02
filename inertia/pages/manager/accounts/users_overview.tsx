@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge'
 import { Fragment, useState } from 'react'
 
 import User from '#models/user'
-import { Paginator, State } from '@/commons/types'
+import { Paginator, State, UserStatus } from '@/commons/types'
 import { Searchbar } from '@/components/commons/searchbar'
 import { Button } from '@/components/ui/button'
 import { CopyIcon, PlusIcon } from 'lucide-react'
@@ -109,7 +109,9 @@ function RowBuilder(props: { user: User; state: State<User | null> }) {
         className="flex items-center gap-x-2 cursor-pointer"
       >
         <Badge variant="outline">{props.user.type}</Badge>
-        {!props.user.isActive && <Badge variant="destructive">Deactivate</Badge>}
+        {props.user.status === UserStatus.disabled && <Badge variant="destructive">Deactivate</Badge>}
+        {props.user.status === UserStatus.verified && <Badge variant="success">Activate</Badge>}
+        {props.user.status === UserStatus.pending && <Badge variant="secondary">Pending</Badge>}
       </TableCell>
       <TableCell onClick={() => setSelectedUser(props.user)} className="text-right cursor-pointer">
         Actions
@@ -156,10 +158,10 @@ const filterOptions: ComponentFilter = [
     type: 'combobox',
     label: 'Account status',
     multiple: false,
-    searchKey: 'isActive',
-    options: [
-      { label: 'Oui', value: 'true' },
-      { label: 'Non', value: 'false' },
-    ],
+    searchKey: 'status',
+    options: Object.values(UserStatus).map((status) => ({
+      label: status,
+      value: status,
+    })),
   },
 ]

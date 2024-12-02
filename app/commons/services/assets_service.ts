@@ -3,11 +3,11 @@ import app from '@adonisjs/core/services/app'
 import path from 'node:path'
 import sharp from 'sharp'
 import * as fs from 'node:fs'
-import { UploadedFile } from '#app/commons/types/index'
+// import { UploadedFile } from '#app/commons/types/index'
 import drive from '@adonisjs/drive/services/main'
 
 export default class AssetsService {
-  async convertAndUpload(file: UploadedFile) {
+  async convertAndUpload(file: any): Promise<string> {
     const key = `${StringHelper.generateRandom(10)}`
 
     try {

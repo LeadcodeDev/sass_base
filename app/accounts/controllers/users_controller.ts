@@ -13,10 +13,10 @@ export default class UsersController {
   constructor(protected assetsService: AssetsService) {}
 
   async index({ inertia, request }: HttpContext) {
-    const { page, limit, search, type, isActive } = await request.validateUsing(userSearchValidator)
+    const { page, limit, search, type, status } = await request.validateUsing(userSearchValidator)
 
     const users = await User.query()
-      .withScopes((scopes) => scopes.search(search, type, isActive))
+      .withScopes((scopes) => scopes.search(search, type, status))
       .preload('roles')
       .paginate(page ?? 1, limit ?? 20)
 
@@ -78,6 +78,9 @@ export default class UsersController {
 
   async delete({ response, params }: HttpContext) {
     const user = await User.findByOrFail('uid', params.uid)
+
+    await user.related('permissions').detach()
+    await user.related('roles').detach()
 
     await user.delete()
     return response.redirect().toRoute('manager.users.index')

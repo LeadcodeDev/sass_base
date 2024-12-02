@@ -8,4 +8,5 @@
 */
 
 import router from '@adonisjs/core/services/router'
-router.on('/').renderInertia('home').as('home')
+import { middleware } from '#start/kernel'
+router.on('/').renderInertia('home').as('home').middleware(middleware.auth())

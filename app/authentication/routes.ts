@@ -5,8 +5,8 @@ import { middleware } from '#start/kernel'
 
 router
   .group(() => {
-    router.get('/signin', [AuthenticationController, 'viewSignin'])
-    router.post('/signin', [AuthenticationController, 'signin'])
-    router.post('/signout', [AuthenticationController, 'logout']).use(middleware.auth())
+    router.get('/login', [AuthenticationController, 'login'])
+    router.post('/login', [AuthenticationController, 'loginAction'])
+    router.post('/logout', [AuthenticationController, 'logout']).use(middleware.auth())
   })
-  .prefix('/auth')
+  .prefix('/authentication')

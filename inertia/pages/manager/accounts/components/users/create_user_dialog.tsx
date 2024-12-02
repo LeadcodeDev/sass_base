@@ -21,6 +21,7 @@ import { toastVariant } from '@/commons/utils'
 import { ReactElement, useState } from 'react'
 import { CreateUserForm } from '@/pages/manager/accounts/components/users/forms/create_user_form'
 import { useRole } from '@/hooks/use_role'
+import { UserStatus } from '@/commons/types'
 
 type Props = {
   trigger: ReactElement
@@ -44,7 +45,7 @@ export function CreateUserDialog(props: Props) {
       roles: [],
       structure: [],
       type: 'user',
-      isActive: true,
+      status: UserStatus.pending,
     },
   })
 

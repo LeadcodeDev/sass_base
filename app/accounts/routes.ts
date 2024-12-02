@@ -1,4 +1,6 @@
 import router from '@adonisjs/core/services/router'
+import { middleware } from '#start/kernel'
+
 const UsersController = () => import('#app/accounts/controllers/users_controller')
 const RolesController = () => import('#app/accounts/controllers/roles_controller')
 const PermissionController = () => import('#app/accounts/controllers/permissions_controller')
@@ -42,4 +44,5 @@ router
       .as('roles')
   })
   .prefix('/manager')
+  .middleware(middleware.auth())
   .as('manager')
