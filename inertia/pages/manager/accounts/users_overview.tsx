@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge'
 import { Fragment, useState } from 'react'
 
 import User from '#models/user'
-import { Paginator, State, UserStatus } from '@/commons/types'
+import { Authenticated, Paginator, State, UserStatus } from '@/commons/types'
 import { Searchbar } from '@/components/commons/searchbar'
 import { Button } from '@/components/ui/button'
 import { CopyIcon, PlusIcon } from 'lucide-react'
@@ -19,8 +19,9 @@ import { toast } from 'sonner'
 import TableFilter, { ComponentFilter } from '@/components/commons/table_filter'
 import UpdateUserSidebar from '@/pages/manager/accounts/components/users/update_permission_sidebar'
 import { CreateUserDialog } from '@/pages/manager/accounts/components/users/create_user_dialog'
+import Protected from '@/components/commons/protected'
 
-type Props = {
+type Props = Authenticated & {
   users: Paginator<User>
 }
 
@@ -47,7 +48,9 @@ export default function UsersOverview(props: Props) {
             resourceRoute="/manager/users/overview"
           />
 
-          <CreateUserDialog trigger={<Button size="sm">New user</Button>} />
+          <Protected permissions="manager:users:store">
+            <CreateUserDialog trigger={<Button size="sm">New user</Button>} />
+          </Protected>
         </div>
       }
     >
@@ -109,7 +112,9 @@ function RowBuilder(props: { user: User; state: State<User | null> }) {
         className="flex items-center gap-x-2 cursor-pointer"
       >
         <Badge variant="outline">{props.user.type}</Badge>
-        {props.user.status === UserStatus.disabled && <Badge variant="destructive">Deactivate</Badge>}
+        {props.user.status === UserStatus.disabled && (
+          <Badge variant="destructive">Deactivate</Badge>
+        )}
         {props.user.status === UserStatus.verified && <Badge variant="success">Activate</Badge>}
         {props.user.status === UserStatus.pending && <Badge variant="secondary">Pending</Badge>}
       </TableCell>

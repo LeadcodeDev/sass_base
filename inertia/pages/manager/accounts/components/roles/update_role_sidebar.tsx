@@ -20,6 +20,7 @@ import {
 } from '@/pages/manager/accounts/validators/role_validators'
 import { RoleForm } from '@/pages/manager/accounts/components/roles/forms/role_form'
 import { usePermission } from '@/hooks/use_permission'
+import Protected from '@/components/commons/protected'
 
 type Props = {
   state: State<Role | null>
@@ -106,19 +107,23 @@ export default function UpdatePermissionSidebar(props: Props) {
 function PermissionFormAction(props: { onDelete?: () => void }) {
   return (
     <div className="flex items-center gap-2">
-      <Button type="submit" size="sm" className="mt-5">
-        Save
-      </Button>
+      <Protected permissions="manager:roles:update">
+        <Button type="submit" size="sm" className="mt-5">
+          Save
+        </Button>
+      </Protected>
       {props.onDelete && (
-        <DeleteButton
-          word="confirmation"
-          onSubmit={props.onDelete}
-          variant="destructive"
-          size="sm"
-          className="mt-5"
-        >
-          Supprimer
-        </DeleteButton>
+        <Protected permissions="manager:roles:delete">
+          <DeleteButton
+            word="confirmation"
+            onSubmit={props.onDelete}
+            variant="destructive"
+            size="sm"
+            className="mt-5"
+          >
+            Supprimer
+          </DeleteButton>
+        </Protected>
       )}
     </div>
   )

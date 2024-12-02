@@ -17,6 +17,7 @@ import TableFilter, { ComponentFilter } from '@/components/commons/table_filter'
 import Permission from '#models/permission'
 import { CreatePermissionDialog } from '@/pages/manager/accounts/components/permissions/create_permission_dialog'
 import UpdatePermissionSidebar from '@/pages/manager/accounts/components/permissions/update_permission_sidebar'
+import Protected from '@/components/commons/protected'
 
 type Props = {
   permissions: Paginator<Permission>
@@ -45,7 +46,9 @@ export default function PermissionsOverview(props: Props) {
             resourceRoute="/manager/permissions/overview"
           />
 
-          <CreatePermissionDialog trigger={<Button size="sm">New permission</Button>} />
+          <Protected permissions="manager:permissions:store">
+            <CreatePermissionDialog trigger={<Button size="sm">New permission</Button>} />
+          </Protected>
         </div>
       }
     >

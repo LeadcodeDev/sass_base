@@ -22,6 +22,7 @@ import { ReactElement, useState } from 'react'
 import { CreateUserForm } from '@/pages/manager/accounts/components/users/forms/create_user_form'
 import { useRole } from '@/hooks/use_role'
 import { UserStatus } from '@/commons/types'
+import Protected from '@/components/commons/protected'
 
 type Props = {
   trigger: ReactElement
@@ -51,6 +52,7 @@ export function CreateUserDialog(props: Props) {
 
   function handleSubmit(values: CreateUserFormSchema) {
     router.post(`/manager/users`, values, {
+      preserveState: true,
       onSuccess: () => {
         setOpen(false)
         toast.success('Success', {
@@ -84,9 +86,11 @@ export function CreateUserDialog(props: Props) {
               Close
             </Button>
           </DialogClose>
-          <Button form="form" type="submit" size="sm" className="mt-5">
-            Save
-          </Button>
+          <Protected permissions="manager:users:store">
+            <Button form="form" type="submit" size="sm" className="mt-5">
+              Save
+            </Button>
+          </Protected>
         </DialogFooter>
       </DialogContent>
     </Dialog>

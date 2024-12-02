@@ -22,11 +22,10 @@ export default class AssetsService {
 
       const disk = drive.use()
       await disk.put(`${key}.webp`, path.join(app.tmpPath()))
-
-      fs.rmSync(app.tmpPath(), { recursive: true })
     } catch (e) {
-      fs.rmSync(app.tmpPath(), { recursive: true })
       console.error(e)
+    } finally {
+      fs.rmSync(app.tmpPath(), { recursive: true })
     }
 
     return key

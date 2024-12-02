@@ -12,6 +12,7 @@ import { UseFormReturn } from 'react-hook-form'
 import { CreateUserFormSchema } from '@/pages/manager/accounts/validators/user_validators'
 import Role from '#models/role'
 import { UserStatus } from '@/commons/types'
+import { useUserPermissions } from '@/hooks/use_user'
 
 type Props = {
   form: UseFormReturn<CreateUserFormSchema>
@@ -21,6 +22,7 @@ type Props = {
 }
 
 export function CreateUserForm(props: Props) {
+  const canBeStore = useUserPermissions('manager:users:store')
   const frameworks = [
     {
       value: 'nuxt.js',
@@ -48,7 +50,7 @@ export function CreateUserForm(props: Props) {
                 <FormItem className="flex-1">
                   <FormLabel>Firstname</FormLabel>
                   <FormControl>
-                    <Input placeholder="John" {...field} />
+                    <Input placeholder="John" disabled={!canBeStore} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -62,7 +64,7 @@ export function CreateUserForm(props: Props) {
                 <FormItem className="flex-1">
                   <FormLabel>Lastname</FormLabel>
                   <FormControl>
-                    <Input placeholder="Doe" {...field} />
+                    <Input placeholder="Doe" disabled={!canBeStore} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -77,7 +79,7 @@ export function CreateUserForm(props: Props) {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="john.doe@foo.bar" {...field} />
+                  <Input placeholder="john.doe@foo.bar" disabled={!canBeStore} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -92,7 +94,7 @@ export function CreateUserForm(props: Props) {
                 <FormItem className="flex-1">
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" {...field} />
+                    <Input type="password" disabled={!canBeStore} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -106,7 +108,7 @@ export function CreateUserForm(props: Props) {
                 <FormItem className="flex-1">
                   <FormLabel>Password confirmation</FormLabel>
                   <FormControl>
-                    <Input type="password" {...field} />
+                    <Input type="password" disabled={!canBeStore} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -134,6 +136,7 @@ export function CreateUserForm(props: Props) {
                         placeholder="Select type..."
                         inputPlaceholder="Search type"
                         emptyPlaceholder="No type found."
+                        disabled={!canBeStore}
                       />
                     </FormControl>
                     <FormMessage />
@@ -160,6 +163,7 @@ export function CreateUserForm(props: Props) {
                         inputPlaceholder="Search roles"
                         emptyPlaceholder="No role found."
                         multiple
+                        disabled={!canBeStore}
                       />
                     </FormControl>
                     <FormMessage />
@@ -185,6 +189,7 @@ export function CreateUserForm(props: Props) {
                     placeholder="Select status..."
                     inputPlaceholder="Search status"
                     emptyPlaceholder="No status found."
+                    disabled={!canBeStore}
                   />
                 </FormControl>
                 <FormMessage />
@@ -207,6 +212,7 @@ export function CreateUserForm(props: Props) {
                     inputPlaceholder="Search framework"
                     emptyPlaceholder="No framework found."
                     multiple
+                    disabled={!canBeStore}
                   />
                 </FormControl>
                 <FormMessage />

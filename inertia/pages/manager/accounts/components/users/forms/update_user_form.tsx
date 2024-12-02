@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button'
 import { DeleteButton } from '@/components/commons/delete_button'
 import Role from '#models/role'
 import { UserStatus } from '@/commons/types'
+import Protected from '@/components/commons/protected'
 
 type Props = {
   form: UseFormReturn<UpdateUserFormSchema>
@@ -41,7 +42,7 @@ export function UpdateUserForm(props: Props) {
   return (
     <Form {...props.form}>
       <form onSubmit={props.form.handleSubmit(props.onSubmit)}>
-        <div className="pt-5 flex flex-col gap-5">
+        <div className="pt-3 flex flex-col gap-5">
           <FormField
             control={props.form.control}
             name="firstname"
@@ -98,10 +99,9 @@ export function UpdateUserForm(props: Props) {
                     }))}
                     defaultValue={field.value}
                     onChange={field.onChange}
-                    placeholder="Select roles..."
-                    inputPlaceholder="Search roles"
-                    emptyPlaceholder="No role found."
-                    multiple
+                    placeholder="Select status..."
+                    inputPlaceholder="Search status"
+                    emptyPlaceholder="No status found."
                   />
                 </FormControl>
                 <FormMessage />
@@ -190,18 +190,22 @@ export function UpdateUserForm(props: Props) {
 function UserFormAction(props: { onDelete: () => void }) {
   return (
     <div className="flex items-center gap-2">
-      <Button type="submit" size="sm" className="mt-5">
-        Save
-      </Button>
-      <DeleteButton
-        word="confirmation"
-        onSubmit={props.onDelete}
-        variant="destructive"
-        size="sm"
-        className="mt-5"
-      >
-        Supprimer
-      </DeleteButton>
+      <Protected permissions="manager:users:update">
+        <Button type="submit" size="sm" className="mt-5">
+          Save
+        </Button>
+      </Protected>
+      <Protected permissions="manager:users:delete">
+        <DeleteButton
+          word="confirmation"
+          onSubmit={props.onDelete}
+          variant="destructive"
+          size="sm"
+          className="mt-5"
+        >
+          Supprimer
+        </DeleteButton>
+      </Protected>
     </div>
   )
 }

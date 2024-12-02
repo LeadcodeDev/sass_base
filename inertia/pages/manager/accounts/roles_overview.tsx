@@ -18,6 +18,7 @@ import { CreateRoleDialog } from '@/pages/manager/accounts/components/roles/crea
 import UpdateRoleSidebar from '@/pages/manager/accounts/components/roles/update_role_sidebar'
 import Role from '#models/role'
 import Permission from '#models/permission'
+import Protected from '@/components/commons/protected'
 
 type Props = {
   roles: Paginator<Role>
@@ -47,7 +48,9 @@ export default function RolesOverview(props: Props) {
             resourceRoute="/manager/roles/overview"
           />
 
-          <CreateRoleDialog trigger={<Button size="sm">New role</Button>} />
+          <Protected permissions="manager:roles:store">
+            <CreateRoleDialog trigger={<Button size="sm">New role</Button>} />
+          </Protected>
         </div>
       }
     >

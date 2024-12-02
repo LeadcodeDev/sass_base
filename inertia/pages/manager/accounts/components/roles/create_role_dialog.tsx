@@ -21,6 +21,7 @@ import {
 } from '@/pages/manager/accounts/validators/role_validators'
 import { RoleForm } from '@/pages/manager/accounts/components/roles/forms/role_form'
 import { usePermission } from '@/hooks/use_permission'
+import Protected from '@/components/commons/protected'
 
 type Props = {
   trigger: ReactElement
@@ -78,9 +79,11 @@ export function CreateRoleDialog(props: Props) {
               Close
             </Button>
           </DialogClose>
-          <Button form="form" type="submit" size="sm" className="mt-5">
-            Save
-          </Button>
+          <Protected permissions="manager:roles:store">
+            <Button form="form" type="submit" size="sm" className="mt-5">
+              Save
+            </Button>
+          </Protected>
         </DialogFooter>
       </DialogContent>
     </Dialog>

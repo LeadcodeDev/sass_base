@@ -7,6 +7,7 @@ import {
 import User from '#models/user'
 import { inject } from '@adonisjs/core'
 import AssetsService from '#app/commons/services/assets_service'
+import db from '@adonisjs/lucid/services/db'
 
 @inject()
 export default class UsersController {
@@ -26,6 +27,19 @@ export default class UsersController {
     }
 
     return inertia.render('manager/accounts/users_overview', { users })
+  }
+
+  async connexions({ params }: HttpContext) {
+    const user = await User.query().where('uid', params.uid).firstOrFail()
+    return User.accessTokens.all(user)
+  }
+
+  async deleteToken({ response, params }: HttpContext) {
+    console.log(params)
+    const user = await User.query().where('uid', params.uid).firstOrFail()
+    await db.query().from('auth_access_tokens').where('tokenable_id', user.id).delete()
+
+    return response.redirect().back()
   }
 
   async create({ inertia }: HttpContext) {

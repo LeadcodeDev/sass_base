@@ -5,7 +5,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from '@/components/ui/sheet'
-import { State, UserStatus } from '@/commons/types'
+import { SnakeToCamelCaseObject, State, UserStatus } from '@/commons/types'
 import { useForm } from 'react-hook-form'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import User from '#models/user'
@@ -19,6 +19,13 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import { UpdateUserForm } from '@/pages/manager/accounts/components/users/forms/update_user_form'
 import { useRole } from '@/hooks/use_role'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useUserConnexions } from '@/hooks/use_user'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { AccessTokenDbColumns } from '@adonisjs/auth/types/access_tokens'
+import { Badge } from '@/components/ui/badge'
+import { DateTime } from 'luxon'
+import { Button } from '@/components/ui/button'
 
 type Props = {
   state: State<User | null>
@@ -31,6 +38,11 @@ export default function UpdateUserSidebar(props: Props) {
     skip: !!selectedUser,
   })
 
+  const connexions = useUserConnexions({
+    uid: selectedUser?.uid,
+    skip: !selectedUser,
+  })
+
   const form = useForm<UpdateUserFormSchema>({
     resolver: zodResolver(updateUserValidator),
     values: {
@@ -40,7 +52,9 @@ export default function UpdateUserSidebar(props: Props) {
       roles: selectedUser?.roles?.map((role) => role.id.toString()) ?? [],
       structure: [],
       type: selectedUser?.type as unknown as string,
-      status: selectedUser?.status ?? UserStatus.pending,
+      status: selectedUser?.status
+        ? Object.values(UserStatus).find((element) => element === selectedUser?.status)!
+        : UserStatus.pending,
     },
   })
 
@@ -57,6 +71,23 @@ export default function UpdateUserSidebar(props: Props) {
         toast.error('Error', {
           ...toastVariant.error,
           description: 'An error occurred while updating the user.',
+        })
+      },
+    })
+  }
+
+  function handleDeleteTokens() {
+    router.delete(`/manager/users/${selectedUser?.uid}/delete-token`, {
+      onSuccess: () => {
+        toast.success('Success', {
+          ...toastVariant.success,
+          description: 'Token was deleted.',
+        })
+      },
+      onError: () => {
+        toast.error('Error', {
+          ...toastVariant.error,
+          description: 'An error occurred while deleting the token.',
         })
       },
     })
@@ -103,15 +134,72 @@ export default function UpdateUserSidebar(props: Props) {
               your data from our servers.
             </SheetDescription>
 
-            <UpdateUserForm
-              form={form}
-              roles={roles}
-              onSubmit={handleSubmit}
-              onDelete={handleDelete}
-            />
+            <div className="mt-5">
+              <Tabs defaultValue="profil" className="w-full">
+                <TabsList>
+                  <TabsTrigger value="profil">Profil</TabsTrigger>
+                  <TabsTrigger value="connexions">Sessions</TabsTrigger>
+                </TabsList>
+                <TabsContent value="profil">
+                  <UpdateUserForm
+                    form={form}
+                    roles={roles}
+                    onSubmit={handleSubmit}
+                    onDelete={handleDelete}
+                  />
+                </TabsContent>
+                <TabsContent value="connexions">
+                  <div className="flex justify-end">
+                    <Button onClick={handleDeleteTokens} variant="destructive" size="xs">
+                      Clear tokens
+                    </Button>
+                  </div>
+                  <div className="flex items-center hover:bg-gray-50 rounded py-3">
+                    <div className="flex justify-between gap-x-2 w-full">
+                      <p className="text-sm">Type</p>
+                      <div className="flex items-center justify-end gap-x-2">
+                        <p className="text-sm">Dernière utilisation</p>
+                        <p className="text-sm w-16">Expiration</p>
+                      </div>
+                    </div>
+                  </div>
+                  <ScrollArea className="min-h-[50dvh] divide-y">
+                    {connexions.map((token, index) => (
+                      <TokenRow
+                        uid={selectedUser?.uid as string}
+                        token={token as unknown as SnakeToCamelCaseObject<AccessTokenDbColumns>}
+                        key={index}
+                      />
+                    ))}
+                  </ScrollArea>
+                </TabsContent>
+              </Tabs>
+            </div>
           </div>
         </SheetHeader>
       </SheetContent>
     </Sheet>
+  )
+}
+
+function TokenRow(props: { uid: string; token: SnakeToCamelCaseObject<AccessTokenDbColumns> }) {
+  function formatDate(value: Date | null) {
+    return value
+      ? DateTime.fromISO(value as unknown as string).toFormat('dd/MM/yyyy hh:mm:ss')
+      : null
+  }
+
+  return (
+    <div className="flex items-center hover:bg-gray-50 rounded py-3">
+      <div className="flex justify-between gap-x-2 w-full">
+        <Badge variant="secondary">{props.token.type}</Badge>
+        <div className="flex items-center justify-end gap-x-2">
+          <p className="text-xs">{formatDate(props.token.lastUsedAt)}</p>
+          <p className="text-xs w-16 flex items-center justify-end">
+            {props.token.expiresAt ? formatDate(props.token.expiresAt) : 'Never'}
+          </p>
+        </div>
+      </div>
+    </div>
   )
 }

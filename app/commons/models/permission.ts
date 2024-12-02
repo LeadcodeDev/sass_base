@@ -22,6 +22,9 @@ export default class Permission extends BaseModel {
   @column()
   declare forAdmin: boolean
 
+  @column()
+  declare deletable: boolean
+
   @manyToMany(() => User)
   declare users: ManyToMany<typeof User>
 

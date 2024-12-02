@@ -10,6 +10,7 @@ export default class extends BaseSchema {
       table.string('uid').notNullable().unique()
       table.string('description').nullable()
       table.boolean('for_admin').defaultTo(false)
+      table.boolean('deletable').defaultTo(true)
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })

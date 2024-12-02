@@ -28,6 +28,7 @@ interface SelectBoxProps {
   emptyPlaceholder?: string
   className?: string
   multiple?: boolean
+  disabled?: boolean
 }
 
 const SelectBox = forwardRef<HTMLInputElement, SelectBoxProps>((props, ref) => {
@@ -65,7 +66,8 @@ const SelectBox = forwardRef<HTMLInputElement, SelectBoxProps>((props, ref) => {
         <Button
           variant={'outline'}
           className={cn(
-            'flex min-h-[36px] cursor-pointer items-center justify-between rounded-md border !px-2 py-1 data-[state=open]:border-ring w-full',
+            'flex min-h-[36px] h-full cursor-pointer items-center justify-between rounded-md border !px-2 py- data-[state=open]:border-ring w-full',
+            props.disabled ? 'cursor-not-allowed opacity-50 pointer-events-none' : 'cursor-pointer',
             props.className
           )}
         >

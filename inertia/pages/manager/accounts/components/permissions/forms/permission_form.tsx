@@ -11,10 +11,11 @@ import { Switch } from '@/components/ui/switch'
 import { UseFormReturn } from 'react-hook-form'
 import {
   CreatePermissionFormSchema,
-  UpdatePermissionFormSchema
+  UpdatePermissionFormSchema,
 } from '@/pages/manager/accounts/validators/permission_validators'
 import { Textarea } from '@/components/ui/textarea'
 import { ReactNode } from 'react'
+import { useUserPermissions } from '@/hooks/use_user'
 
 type PermissionFormSchema = CreatePermissionFormSchema | UpdatePermissionFormSchema
 
@@ -26,6 +27,8 @@ type Props = {
 }
 
 export function PermissionForm(props: Props) {
+  const canBeStore = useUserPermissions('manager:permissions:store')
+
   return (
     <Form {...props.form}>
       <form id={props.id} onSubmit={props.form.handleSubmit(props.onSubmit)}>
@@ -37,7 +40,7 @@ export function PermissionForm(props: Props) {
               <FormItem className="flex-1">
                 <FormLabel>Identifier</FormLabel>
                 <FormControl>
-                  <Input placeholder="domain:resource:action" {...field} />
+                  <Input placeholder="domain:resource:action" disabled={!canBeStore} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -51,7 +54,7 @@ export function PermissionForm(props: Props) {
               <FormItem className="flex-1">
                 <FormLabel>Label</FormLabel>
                 <FormControl>
-                  <Input placeholder="Permission label" {...field} />
+                  <Input placeholder="Permission label" disabled={!canBeStore} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -68,6 +71,7 @@ export function PermissionForm(props: Props) {
                   <Textarea
                     placeholder="Explain what this permission does"
                     className="resize-none"
+                    disabled={!canBeStore}
                     {...field}
                   />
                 </FormControl>
@@ -87,6 +91,7 @@ export function PermissionForm(props: Props) {
                     labelBuilder={(checked) => (checked ? 'Active' : 'Inactive')}
                     checked={field.value}
                     onCheckedChange={field.onChange}
+                    disabled={!canBeStore}
                     {...field}
                   />
                 </FormControl>

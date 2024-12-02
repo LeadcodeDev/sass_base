@@ -3,7 +3,7 @@ import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
 import { BaseModel, beforeCreate, column, manyToMany, scope } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
-import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
+import { AccessToken, DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 import type { ManyToMany } from '@adonisjs/lucid/types/relations'
 import Role from '#models/role'
 import Permission from '#models/permission'
@@ -49,6 +49,8 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
+
+  declare currentAccessToken?: AccessToken
 
   static accessTokens = DbAccessTokensProvider.forModel(User)
 

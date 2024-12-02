@@ -19,6 +19,7 @@ import Permission from '#models/permission'
 import { PermissionForm } from '@/pages/manager/accounts/components/permissions/forms/permission_form'
 import { Button } from '@/components/ui/button'
 import { DeleteButton } from '@/components/commons/delete_button'
+import Protected from '@/components/commons/protected'
 
 type Props = {
   state: State<Permission | null>
@@ -87,29 +88,38 @@ export default function UpdatePermissionSidebar(props: Props) {
         <PermissionForm
           form={form}
           onSubmit={handleSubmit}
-          actions={<PermissionFormAction onDelete={handleDelete} />}
+          actions={
+            <PermissionFormAction
+              onDelete={handleDelete}
+              deletable={selectedPermission?.deletable}
+            />
+          }
         />
       </SheetContent>
     </Sheet>
   )
 }
 
-function PermissionFormAction(props: { onDelete?: () => void }) {
+function PermissionFormAction(props: { onDelete?: () => void; deletable?: boolean }) {
   return (
     <div className="flex items-center gap-2">
-      <Button type="submit" size="sm" className="mt-5">
-        Save
-      </Button>
-      {props.onDelete && (
-        <DeleteButton
-          word="confirmation"
-          onSubmit={props.onDelete}
-          variant="destructive"
-          size="sm"
-          className="mt-5"
-        >
-          Supprimer
-        </DeleteButton>
+      <Protected permissions="manager:permissions:update">
+        <Button type="submit" size="sm" className="mt-5">
+          Save
+        </Button>
+      </Protected>
+      {props.deletable && props.onDelete && (
+        <Protected permissions="manager:permissions:delete">
+          <DeleteButton
+            word="confirmation"
+            onSubmit={props.onDelete}
+            variant="destructive"
+            size="sm"
+            className="mt-5"
+          >
+            Supprimer
+          </DeleteButton>
+        </Protected>
       )}
     </div>
   )

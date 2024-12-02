@@ -11,8 +11,16 @@ const inertiaConfig = defineConfig({
    * Data that should be shared with all rendered pages
    */
   sharedData: {
-    currentUser: (ctx) => ctx.auth.user,
-    a: 'ss',
+    currentUser: (ctx) => ctx.auth?.user,
+    currentPermissions: (ctx) => {
+      if (!ctx.auth?.user) return []
+      return [
+        ...ctx.auth.user.permissions?.map((permission) => permission.uid),
+        ...ctx.auth.user.roles?.reduce((acc, role) => {
+          return [...acc, ...role.permissions.map((permission) => permission.uid)]
+        }, [] as string[]),
+      ]
+    },
     errors: (ctx) => ctx.session?.flashMessages.get('errors'),
   },
 

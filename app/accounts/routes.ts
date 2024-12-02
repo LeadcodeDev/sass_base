@@ -10,6 +10,8 @@ router
     router
       .group(() => {
         router.get('overview', [UsersController, 'index']).as('index')
+        router.get('/:uid/connexions', [UsersController, 'connexions']).as('connexions')
+        router.delete('/:uid/delete-token', [UsersController, 'deleteToken']).as('deleteToken')
         router.get('create', [UsersController, 'create']).as('create')
         router.post('', [UsersController, 'store']).as('store')
         router.get(':uid', [UsersController, 'show']).as('show')

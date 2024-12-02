@@ -23,10 +23,19 @@ export type ZodSchema<T extends z.ZodType<any, any, any>> = z.infer<T>
 
 export type Authenticated = {
   currentUser: User
+  currentPermissions: string[]
 }
 
 export enum UserStatus {
   pending = 'pending',
   verified = 'verified',
   disabled = 'disabled',
+}
+
+type SnakeToCamelCase<S extends string> = S extends `${infer T}_${infer U}`
+  ? `${T}${Capitalize<SnakeToCamelCase<U>>}`
+  : S
+
+export type SnakeToCamelCaseObject<T> = {
+  [K in keyof T as SnakeToCamelCase<string & K>]: T[K]
 }

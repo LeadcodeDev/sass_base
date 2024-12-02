@@ -20,6 +20,7 @@ import {
   createPermissionValidator,
 } from '@/pages/manager/accounts/validators/permission_validators'
 import { PermissionForm } from '@/pages/manager/accounts/components/permissions/forms/permission_form'
+import Protected from '@/components/commons/protected'
 
 type Props = {
   trigger: ReactElement
@@ -72,9 +73,11 @@ export function CreatePermissionDialog(props: Props) {
               Close
             </Button>
           </DialogClose>
-          <Button form="form" type="submit" size="sm" className="mt-5">
-            Save
-          </Button>
+          <Protected permissions="manager:permissions:store">
+            <Button form="form" type="submit" size="sm" className="mt-5">
+              Save
+            </Button>
+          </Protected>
         </DialogFooter>
       </DialogContent>
     </Dialog>
