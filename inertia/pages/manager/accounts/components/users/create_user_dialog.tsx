@@ -17,7 +17,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import { router } from '@inertiajs/react'
 import { toast } from 'sonner'
-import { toastVariant } from '@/commons/utils'
+import { permission, toastVariant } from '@/commons/utils'
 import { ReactElement, useState } from 'react'
 import { CreateUserForm } from '@/pages/manager/accounts/components/users/forms/create_user_form'
 import { useRole } from '@/hooks/use_role'
@@ -30,7 +30,7 @@ type Props = {
 }
 
 export function CreateUserDialog(props: Props) {
-  const canBeUsed = useUserPermissions('manager:users:store')
+  const canBeUsed = useUserPermissions(permission.users('store', true))
 
   const [open, setOpen] = useState(false)
   const roles = useRole({
@@ -95,7 +95,7 @@ export function CreateUserDialog(props: Props) {
               Close
             </Button>
           </DialogClose>
-          <Protected permissions="manager:users:store">
+          <Protected permissions={permission.users('store', true)}>
             <Button form="form" type="submit" size="sm" className="mt-5">
               Save
             </Button>

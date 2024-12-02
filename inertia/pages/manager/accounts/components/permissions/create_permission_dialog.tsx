@@ -13,7 +13,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { router } from '@inertiajs/react'
 import { toast } from 'sonner'
-import { toastVariant } from '@/commons/utils'
+import { permission, toastVariant } from '@/commons/utils'
 import { ReactElement, useState } from 'react'
 import {
   CreatePermissionFormSchema,
@@ -28,7 +28,7 @@ type Props = {
 }
 
 export function CreatePermissionDialog(props: Props) {
-  const canBeUsed = useUserPermissions('manager:permissions:store')
+  const canBeUsed = useUserPermissions(permission.permissions('store', true))
 
   const [open, setOpen] = useState(false)
   const form = useForm<CreatePermissionFormSchema>({
@@ -76,7 +76,7 @@ export function CreatePermissionDialog(props: Props) {
               Close
             </Button>
           </DialogClose>
-          <Protected permissions="manager:permissions:store">
+          <Protected permissions={permission.permissions('store', true)}>
             <Button form="form" type="submit" size="sm" className="mt-5">
               Save
             </Button>

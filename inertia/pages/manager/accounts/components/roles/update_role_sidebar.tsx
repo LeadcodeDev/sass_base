@@ -9,7 +9,7 @@ import { State } from '@/commons/types'
 import { useForm } from 'react-hook-form'
 import { router } from '@inertiajs/react'
 import { toast } from 'sonner'
-import { toastVariant } from '@/commons/utils'
+import { permission, toastVariant } from '@/commons/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@/components/ui/button'
 import { DeleteButton } from '@/components/commons/delete_button'
@@ -21,12 +21,15 @@ import {
 import { RoleForm } from '@/pages/manager/accounts/components/roles/forms/role_form'
 import { usePermission } from '@/hooks/use_permission'
 import Protected from '@/components/commons/protected'
+import { useUserPermissions } from '@/hooks/use_user'
 
 type Props = {
   state: State<Role | null>
 }
 
 export default function UpdatePermissionSidebar(props: Props) {
+  const canBeUsed = useUserPermissions(permission.roles('update', true))
+
   const [selectedRole, setSelectedRole] = props.state
   const permissions = usePermission({
     limit: 9999999,
@@ -95,6 +98,7 @@ export default function UpdatePermissionSidebar(props: Props) {
           <RoleForm
             form={form}
             permissions={permissions}
+            canBeUsed={canBeUsed}
             onSubmit={handleSubmit}
             actions={<PermissionFormAction onDelete={handleDelete} />}
           />
@@ -107,13 +111,13 @@ export default function UpdatePermissionSidebar(props: Props) {
 function PermissionFormAction(props: { onDelete?: () => void }) {
   return (
     <div className="flex items-center gap-2">
-      <Protected permissions="manager:roles:update">
+      <Protected permissions={permission.roles('update', true)}>
         <Button type="submit" size="sm" className="mt-5">
           Save
         </Button>
       </Protected>
       {props.onDelete && (
-        <Protected permissions="manager:roles:delete">
+        <Protected permissions={permission.roles('delete', true)}>
           <DeleteButton
             word="confirmation"
             onSubmit={props.onDelete}

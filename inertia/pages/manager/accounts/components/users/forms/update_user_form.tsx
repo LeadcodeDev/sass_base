@@ -15,6 +15,7 @@ import { DeleteButton } from '@/components/commons/delete_button'
 import Role from '#models/role'
 import { UserStatus } from '@/commons/types'
 import Protected from '@/components/commons/protected'
+import { permission } from '@/commons/utils'
 
 type Props = {
   form: UseFormReturn<UpdateUserFormSchema>
@@ -195,12 +196,12 @@ export function UpdateUserForm(props: Props) {
 function UserFormAction(props: { onDelete: () => void }) {
   return (
     <div className="flex items-center gap-2">
-      <Protected permissions="manager:users:update">
+      <Protected permissions={permission.users('update', true)}>
         <Button type="submit" size="sm" className="mt-5">
           Save
         </Button>
       </Protected>
-      <Protected permissions="manager:users:delete">
+      <Protected permissions={permission.users('delete', true)}>
         <DeleteButton
           word="confirmation"
           onSubmit={props.onDelete}

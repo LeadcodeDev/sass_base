@@ -11,7 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import User from '#models/user'
 import { router } from '@inertiajs/react'
 import { toast } from 'sonner'
-import { toastVariant } from '@/commons/utils'
+import { permission, toastVariant } from '@/commons/utils'
 import {
   UpdateUserFormSchema,
   updateUserValidator,
@@ -32,7 +32,7 @@ type Props = {
 }
 
 export default function UpdateUserSidebar(props: Props) {
-  const canBeUsed = useUserPermissions('manager:users:update')
+  const canBeUsed = useUserPermissions(permission.users('update', true))
 
   const [selectedUser, setSelectedUser] = props.state
   const roles = useRole({

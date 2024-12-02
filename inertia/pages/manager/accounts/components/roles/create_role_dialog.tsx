@@ -13,7 +13,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { router } from '@inertiajs/react'
 import { toast } from 'sonner'
-import { toastVariant } from '@/commons/utils'
+import { permission, toastVariant } from '@/commons/utils'
 import { ReactElement, useState } from 'react'
 import {
   CreateRoleFormSchema,
@@ -29,7 +29,7 @@ type Props = {
 }
 
 export function CreateRoleDialog(props: Props) {
-  const canBeUsed = useUserPermissions('manager:roles:store')
+  const canBeUsed = useUserPermissions(permission.roles('store', true))
 
   const [open, setOpen] = useState(false)
   const permissions = usePermission({
@@ -74,7 +74,13 @@ export function CreateRoleDialog(props: Props) {
           <DialogDescription>Fill in the form to create a new role.</DialogDescription>
         </DialogHeader>
 
-        <RoleForm id="form" form={form} canBeUsed={canBeUsed} permissions={permissions} onSubmit={handleSubmit} />
+        <RoleForm
+          id="form"
+          form={form}
+          canBeUsed={canBeUsed}
+          permissions={permissions}
+          onSubmit={handleSubmit}
+        />
 
         <DialogFooter className="flex items-center sm:justify-start">
           <DialogClose asChild>
@@ -82,7 +88,7 @@ export function CreateRoleDialog(props: Props) {
               Close
             </Button>
           </DialogClose>
-          <Protected permissions="manager:roles:store">
+          <Protected permissions={permission.roles('store', true)}>
             <Button form="form" type="submit" size="sm" className="mt-5">
               Save
             </Button>

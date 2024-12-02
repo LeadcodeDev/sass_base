@@ -9,7 +9,7 @@ import { State } from '@/commons/types'
 import { useForm } from 'react-hook-form'
 import { router } from '@inertiajs/react'
 import { toast } from 'sonner'
-import { toastVariant } from '@/commons/utils'
+import { permission, toastVariant } from '@/commons/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   UpdatePermissionFormSchema,
@@ -27,7 +27,7 @@ type Props = {
 }
 
 export default function UpdatePermissionSidebar(props: Props) {
-  const canBeUsed = useUserPermissions('manager:permissions:update')
+  const canBeUsed = useUserPermissions(permission.permissions('update', true))
 
   const [selectedPermission, setSelectedPermission] = props.state
   const form = useForm<UpdatePermissionFormSchema>({
@@ -107,13 +107,13 @@ export default function UpdatePermissionSidebar(props: Props) {
 function PermissionFormAction(props: { onDelete?: () => void; deletable?: boolean }) {
   return (
     <div className="flex items-center gap-2">
-      <Protected permissions="manager:permissions:update">
+      <Protected permissions={permission.permissions('update', true)}>
         <Button type="submit" size="sm" className="mt-5">
           Save
         </Button>
       </Protected>
       {props.deletable && props.onDelete && (
-        <Protected permissions="manager:permissions:delete">
+        <Protected permissions={permission.permissions('delete', true)}>
           <DeleteButton
             word="confirmation"
             onSubmit={props.onDelete}

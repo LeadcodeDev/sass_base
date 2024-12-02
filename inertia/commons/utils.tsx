@@ -85,3 +85,11 @@ export const toastVariant: { [key in ToastVariant]: ExternalToast } = {
   error: baseVariant,
   success: baseVariant,
 }
+
+type Action = 'store' | 'update' | 'delete'
+
+export const permission = {
+  users: (action: Action, manager: boolean = false) => `${manager ? 'manager:' : ''}users:${action}`,
+  roles: (action: Action, manager: boolean = false) => `${manager ? 'manager:' : ''}roles:${action}`,
+  permissions: (action: Action, manager: boolean = false) => `${manager ? 'manager:' : ''}permissions:${action}`,
+}
