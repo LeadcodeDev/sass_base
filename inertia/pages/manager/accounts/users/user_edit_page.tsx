@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import {
   UpdateUserFormSchema,
   updateUserValidator,
-} from '@/pages/manager/accounts/validators/user_validators'
+} from '@/pages/manager/accounts/users/validators/user_validators'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SnakeToCamelCaseObject, UserStatus } from '@/commons/types'
 import { router } from '@inertiajs/react'

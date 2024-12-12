@@ -1,7 +1,7 @@
 import { useUserPermissions } from '@/hooks/use_user'
 import { permission, toastVariant } from '@/commons/utils'
 import { useForm } from 'react-hook-form'
-import { CreateUserFormSchema, createUserValidator } from '@/pages/manager/accounts/validators/user_validators'
+import { CreateUserFormSchema, createUserValidator } from '@/pages/manager/accounts/users/validators/user_validators'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { UserStatus } from '@/commons/types'
 import { router } from '@inertiajs/react'
