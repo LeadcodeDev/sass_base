@@ -17,14 +17,12 @@ export default class RolesController {
       .preload('users')
       .paginate(page ?? 1, limit ?? 20)
 
-    return inertia.render('manager/accounts/roles_overview', { roles })
+    return inertia.render('manager/accounts/roles/roles_overview', { roles })
   }
 
-  async create({ request }: HttpContext) {
-    const bestMatch = request.header('Content-Type')
-    if (bestMatch === 'application/json') {
-      return Permission.all()
-    }
+  async create({ inertia }: HttpContext) {
+    const permissions = await Permission.query().preload('roles')
+    return inertia.render('manager/accounts/roles/role_create_page', { permissions })
   }
 
   async store({ request, response }: HttpContext) {
@@ -39,9 +37,10 @@ export default class RolesController {
   }
 
   async edit({ params, inertia }: HttpContext) {
-    const role = await Role.findByOrFail('uid', params.uid)
+    const role = await Role.query().where('uid', params.uid).preload('permissions').firstOrFail()
+    const permissions = await Permission.query().preload('roles')
 
-    return inertia.render('permissions', { role })
+    return inertia.render('manager/accounts/roles/role_edit_page', { role, permissions })
   }
 
   async update({ request, response, params }: HttpContext) {

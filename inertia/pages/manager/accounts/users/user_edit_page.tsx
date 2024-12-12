@@ -18,6 +18,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { DateTime } from 'luxon'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 
 type Props = {
   roles: Role[]
@@ -97,9 +98,9 @@ export default function UserEditPage(props: Props) {
         </TabsContent>
         <TabsContent value="connexions">
           <div className="flex justify-end">
-            {/*<Button onClick={handleDeleteTokens} variant="destructive" size="xs">*/}
-            {/*  Clear tokens*/}
-            {/*</Button>*/}
+            <Button onClick={handleDeleteTokens} variant="destructive" size="xs">
+              Clear tokens
+            </Button>
           </div>
           <div className="flex items-center hover:bg-gray-50 rounded py-3">
             <div className="flex justify-between gap-x-2 w-full">
