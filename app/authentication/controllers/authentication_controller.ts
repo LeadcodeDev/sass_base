@@ -14,10 +14,8 @@ export default class AuthenticationController {
     const { email, password } = request.only(['email', 'password'])
 
     const user = await User.verifyCredentials(email, password)
-
     const oat = await User.accessTokens.create(user)
 
-    console.log(oat.value)
     response.cookie(env.get('AUTH_COOKIE'), oat.value!.release(), {
       maxAge: 60 * 60 * 24 * 7,
       sameSite: 'none',
@@ -27,6 +25,7 @@ export default class AuthenticationController {
 
     return response.redirect().toRoute('home')
   }
+
   async logout({ auth, response }: HttpContext) {
     const user = auth.user!
     await User.accessTokens.delete(user as unknown as User, user.currentAccessToken.identifier)

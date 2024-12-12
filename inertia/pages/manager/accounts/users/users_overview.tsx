@@ -17,9 +17,9 @@ import { Button } from '@/components/ui/button'
 import { CopyIcon, PlusIcon } from 'lucide-react'
 import { toast } from 'sonner'
 import TableFilter, { ComponentFilter } from '@/components/commons/table_filter'
-import UpdateUserSidebar from '@/pages/manager/accounts/components/users/update_permission_sidebar'
-import { CreateUserDialog } from '@/pages/manager/accounts/components/users/create_user_dialog'
 import Protected from '@/components/commons/protected'
+import { CreateUserDialog } from '@/pages/manager/accounts/users/components/create_user_dialog'
+import UpdateUserSidebar from '@/pages/manager/accounts/users/components/update_permission_sidebar'
 
 type Props = Authenticated & {
   users: Paginator<User>

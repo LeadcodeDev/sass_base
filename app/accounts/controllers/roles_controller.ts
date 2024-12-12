@@ -17,11 +17,6 @@ export default class RolesController {
       .preload('users')
       .paginate(page ?? 1, limit ?? 20)
 
-    const contentType = request.accepts(['html', 'json'])
-    if (contentType === 'json') {
-      return roles
-    }
-
     return inertia.render('manager/accounts/roles_overview', { roles })
   }
 

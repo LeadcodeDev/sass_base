@@ -12,6 +12,7 @@ import { UseFormReturn } from 'react-hook-form'
 import { CreateUserFormSchema } from '@/pages/manager/accounts/validators/user_validators'
 import Role from '#models/role'
 import { UserStatus } from '@/commons/types'
+import { Label } from '@/components/ui/label'
 
 type Props = {
   form: UseFormReturn<CreateUserFormSchema>
@@ -41,6 +42,32 @@ export function CreateUserForm(props: Props) {
     <Form {...props.form}>
       <form id={props.id} onSubmit={props.form.handleSubmit(props.onSubmit)}>
         <div className="pt-5 flex flex-col gap-5">
+          <FormField
+            control={props.form.control}
+            name="avatar"
+            render={({ field: { value, onChange, ...fieldProps } }) => (
+              <FormItem className="flex-1">
+                <FormLabel>Avatar</FormLabel>
+                <FormControl>
+                  <div className="grid w-full max-w-sm items-center gap-1.5">
+                    <Label htmlFor="picture">Picture</Label>
+                    <Input
+                      id="picture"
+                      {...fieldProps}
+                      placeholder="Picture"
+                      type="file"
+                      accept="image/*, application/pdf"
+                      onChange={(event) =>
+                        onChange(event.target.files && event.target.files[0])
+                      }
+                    />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <div className="flex gap-5 w-full">
             <FormField
               control={props.form.control}

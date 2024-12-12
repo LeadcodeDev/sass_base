@@ -8,6 +8,7 @@ import User from '#models/user'
 import { inject } from '@adonisjs/core'
 import AssetsService from '#app/commons/services/assets_service'
 import db from '@adonisjs/lucid/services/db'
+import Role from '#models/role'
 
 @inject()
 export default class UsersController {
@@ -26,16 +27,10 @@ export default class UsersController {
       return users
     }
 
-    return inertia.render('manager/accounts/users_overview', { users })
-  }
-
-  async connexions({ params }: HttpContext) {
-    const user = await User.query().where('uid', params.uid).firstOrFail()
-    return User.accessTokens.all(user)
+    return inertia.render('manager/accounts/users/users_overview', { users })
   }
 
   async deleteToken({ response, params }: HttpContext) {
-    console.log(params)
     const user = await User.query().where('uid', params.uid).firstOrFail()
     await db.query().from('auth_access_tokens').where('tokenable_id', user.id).delete()
 
@@ -43,7 +38,8 @@ export default class UsersController {
   }
 
   async create({ inertia }: HttpContext) {
-    return inertia.render('accounts/create')
+    const roles = await Role.query()
+    return inertia.render('manager/accounts/users/user_create_page', { roles })
   }
 
   async store({ request, response }: HttpContext) {
@@ -67,6 +63,14 @@ export default class UsersController {
   async show({ inertia, params }: HttpContext) {
     const user = await User.query().where('uid', params.uid).firstOrFail()
     return inertia.render('accounts/show', { user })
+  }
+
+  async edit({ inertia, params }: HttpContext) {
+    const user = await User.query().where('uid', params.uid).firstOrFail()
+    const roles = await Role.query()
+    const connexions = await User.accessTokens.all(user)
+
+    return inertia.render('manager/accounts/users/user_edit_page', { user, roles, connexions })
   }
 
   async update({ request, response, params }: HttpContext) {

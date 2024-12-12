@@ -15,6 +15,7 @@ router
         router.get('create', [UsersController, 'create']).as('create')
         router.post('', [UsersController, 'store']).as('store')
         router.get(':uid', [UsersController, 'show']).as('show')
+        router.get(':uid/edit', [UsersController, 'edit']).as('edit')
         router.put(':uid', [UsersController, 'update']).as('update')
         router.delete(':uid', [UsersController, 'delete']).as('delete')
       })

@@ -33,7 +33,6 @@ export default class HttpExceptionHandler extends ExceptionHandler {
    * response to the client
    */
   async handle(error: unknown, ctx: HttpContext) {
-    console.log(error)
     if (error instanceof errors.E_INVALID_CREDENTIALS) {
       return ctx.response.status(error.status).send(error.getResponseMessage(error, ctx))
     }

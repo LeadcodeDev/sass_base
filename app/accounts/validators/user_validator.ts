@@ -23,7 +23,7 @@ export const createUserValidator = vine.compile(
     permissions: vine.array(vine.number()).optional(),
     avatar: vine
       .file({
-        size: '2mb',
+        size: '8mb',
         extnames: ['jpg', 'png'],
       })
       .optional(),

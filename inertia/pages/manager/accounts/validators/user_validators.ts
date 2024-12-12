@@ -16,6 +16,9 @@ export const createUserValidator = z.object({
   structure: z.array(z.string()),
   type: z.string(),
   status: z.enum([UserStatus.pending, UserStatus.verified, UserStatus.disabled]),
+  avatar: z.instanceof(File).refine((file) => file.size < 7000000, {
+    message: 'Your resume must be less than 7MB.',
+  }),
 })
 
 export const updateUserValidator = z.object({
