@@ -19,7 +19,7 @@ import { toast } from 'sonner'
 import TableFilter, { ComponentFilter } from '@/components/commons/table_filter'
 import Protected from '@/components/commons/protected'
 import { CreateUserDialog } from '@/pages/manager/accounts/users/components/create_user_dialog'
-import UpdateUserSidebar from '@/pages/manager/accounts/users/components/update_permission_sidebar'
+import UpdateUserSidebar from '@/pages/manager/accounts/users/components/update_user_sidebar'
 
 type Props = Authenticated & {
   users: Paginator<User>

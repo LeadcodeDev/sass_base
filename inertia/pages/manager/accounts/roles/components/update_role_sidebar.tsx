@@ -13,7 +13,7 @@ type Props = {
   state: State<Role | null>
 }
 
-export default function UpdatePermissionSidebar(props: Props) {
+export default function UpdateRoleSidebar(props: Props) {
   const [selectedRole, setSelectedRole] = props.state
 
   return (

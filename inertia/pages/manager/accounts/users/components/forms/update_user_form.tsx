@@ -9,13 +9,13 @@ import {
 import { Input } from '@/components/ui/input'
 import SelectBox from '@/components/ui/select'
 import { UseFormReturn } from 'react-hook-form'
-import { UpdateUserFormSchema } from '@/pages/manager/accounts/validators/user_validators'
 import { Button } from '@/components/ui/button'
 import { DeleteButton } from '@/components/commons/delete_button'
 import Role from '#models/role'
 import { UserStatus } from '@/commons/types'
 import Protected from '@/components/commons/protected'
 import { permission } from '@/commons/utils'
+import { UpdateUserFormSchema } from '@/pages/manager/accounts/users/validators/user_validators'
 
 type Props = {
   form: UseFormReturn<UpdateUserFormSchema>

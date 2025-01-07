@@ -14,9 +14,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import {
   UpdatePermissionFormSchema,
   updatePermissionValidator,
-} from '@/pages/manager/accounts/validators/permission_validators'
+} from '@/pages/manager/accounts/permissions/validators/permission_validators'
 import Permission from '#models/permission'
-import { PermissionForm } from '@/pages/manager/accounts/components/permissions/forms/permission_form'
+import { PermissionForm } from '@/pages/manager/accounts/permissions/components/permissions/forms/permission_form'
 import { Button } from '@/components/ui/button'
 import { DeleteButton } from '@/components/commons/delete_button'
 import Protected from '@/components/commons/protected'

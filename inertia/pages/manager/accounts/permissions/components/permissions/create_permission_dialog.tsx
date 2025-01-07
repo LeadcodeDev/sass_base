@@ -18,10 +18,10 @@ import { ReactElement, useState } from 'react'
 import {
   CreatePermissionFormSchema,
   createPermissionValidator,
-} from '@/pages/manager/accounts/validators/permission_validators'
-import { PermissionForm } from '@/pages/manager/accounts/components/permissions/forms/permission_form'
+} from '@/pages/manager/accounts/permissions/validators/permission_validators'
 import Protected from '@/components/commons/protected'
 import { useUserPermissions } from '@/hooks/use_user'
+import { PermissionForm } from '@/pages/manager/accounts/permissions/components/permissions/forms/permission_form'
 
 type Props = {
   trigger: ReactElement
