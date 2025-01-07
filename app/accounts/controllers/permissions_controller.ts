@@ -19,7 +19,7 @@ export default class PermissionController {
       return permissions
     }
 
-    return inertia.render('manager/accounts/permissions_overview', { permissions })
+    return inertia.render('manager/accounts/permissions/permissions_overview', { permissions })
   }
 
   async create({ inertia }: HttpContext) {
