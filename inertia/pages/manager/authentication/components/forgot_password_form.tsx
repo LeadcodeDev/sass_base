@@ -2,12 +2,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { UseFormReturn } from 'react-hook-form'
 import { ReactNode } from 'react'
-import { LoginFormSchema } from '@/pages/manager/authentication/validators/login_validator'
 import { Button } from '@/components/ui/button'
+import {ForgotPasswordFormSchema} from "@/pages/manager/authentication/validators/forgot_password_validator";
 
 type Props = {
-  form: UseFormReturn<LoginFormSchema>
-  onSubmit: (data: LoginFormSchema) => void
+  form: UseFormReturn<ForgotPasswordFormSchema>
+  onSubmit: (data: ForgotPasswordFormSchema) => void
   actions?: ReactNode
   id?: string
 }
@@ -30,24 +30,10 @@ export default function ForgotPasswordForm(props: Props) {
               </FormItem>
             )}
           />
-
-          <FormField
-            control={props.form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem className="flex-1">
-                <FormLabel>Mot de passe</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
         </div>
 
         <Button type="submit" size="sm" className="mt-5">
-          Connexion
+          Envoyer le lien
         </Button>
       </form>
     </Form>

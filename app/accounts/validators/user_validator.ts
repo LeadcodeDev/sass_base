@@ -60,3 +60,9 @@ export const updateUserValidator = (uid: string) =>
         .optional(),
     })
   )
+
+export const resetPasswordValidator = vine.compile(
+  vine.object({
+    password: vine.string().trim().minLength(3).confirmed(),
+  })
+)
