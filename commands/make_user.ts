@@ -14,7 +14,7 @@ export default class MakeUser extends BaseCommand {
   }
 
   async run() {
-    const { default: User } = await import('#app/commons/models/User')
+    const { default: User } = await import('#app/commons/models/user')
 
     try {
       const firstname = await this.prompt.ask('Enter the firstname')

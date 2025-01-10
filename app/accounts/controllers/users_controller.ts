@@ -39,6 +39,7 @@ export default class UsersController {
 
   async store({ request, response }: HttpContext) {
     const data = await request.validateUsing(createUserValidator)
+
     const user = await User.create({
       ...data,
       avatar: data.avatar ? await this.assetsService.convertAndUpload(data.avatar) : null,
