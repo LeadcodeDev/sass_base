@@ -26,13 +26,13 @@ export default function AuthenticationPage(props: Props) {
       onSuccess: () => {
         toast.success('Success', {
           ...toastVariant.success,
-          description: 'Mot de passe changé.',
+          description: 'Le mot de passe à été modifié.',
         })
       },
       onError: () => {
         toast.error('Error', {
           ...toastVariant.error,
-          description: 'Une erreur est survenue lors du changement de mot de passe.',
+          description: 'Une erreur est survenue lors de la modification du mot de passe.',
         })
       },
     })

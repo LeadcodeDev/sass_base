@@ -25,7 +25,7 @@ export default function ResetPasswordForm(props: Props) {
               <FormItem className="flex-1">
                 <FormLabel>Mot de passe</FormLabel>
                 <FormControl>
-                  <Input {...field} type={"password"}/>
+                  <Input {...field} type="password"/>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -38,7 +38,7 @@ export default function ResetPasswordForm(props: Props) {
               <FormItem className="flex-1">
                 <FormLabel>Confirmer le mot de passe</FormLabel>
                 <FormControl >
-                  <Input {...field} type={"password"}/>
+                  <Input {...field} type="password"/>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -47,7 +47,7 @@ export default function ResetPasswordForm(props: Props) {
         </div>
 
         <Button type="submit" size="sm" className="mt-5">
-          Changer le mot de passe
+          Modifier le mot de passe
         </Button>
       </form>
     </Form>
