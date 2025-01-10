@@ -33,7 +33,7 @@ export default function ForgotPasswordForm(props: Props) {
         </div>
 
         <Button type="submit" size="sm" className="mt-5">
-          Envoyer le lien
+          Réinitialiser le mot de passe
         </Button>
       </form>
     </Form>

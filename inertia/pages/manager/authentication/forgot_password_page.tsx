@@ -20,20 +20,20 @@ export default function AuthenticationPage() {
       onSuccess: () => {
         toast.success('Success', {
           ...toastVariant.success,
-          description: 'Vous êtes maintenant connecté.',
+          description: 'Un email a été envoyé à l\'adresse email renseignée.',
         })
       },
       onError: () => {
         toast.error('Error', {
           ...toastVariant.error,
-          description: 'Une erreur est survenue lors de la connexion.',
+          description: 'Une erreur est survenue lors de la réinitialisation de mot de passe.',
         })
       },
     })
   }
 
   return (
-    <div className="">
+    <div>
       <div className="container relative hidden min-h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <a
           href="/examples/authentication"

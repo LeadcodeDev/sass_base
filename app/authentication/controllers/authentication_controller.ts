@@ -3,8 +3,10 @@ import User from '#models/user'
 import env from '#start/env'
 import mail from '@adonisjs/mail/services/main'
 import router from '@adonisjs/core/services/router'
-// import {dd} from "@adonisjs/core/services/dumper";
-import { resetPasswordValidator } from '#app/accounts/validators/user_validator'
+import {
+  resetPasswordValidator,
+  forgotPasswordValidator,
+} from '#app/accounts/validators/user_validator'
 
 export default class AuthenticationController {
   async login({ auth, response, inertia }: HttpContext) {
@@ -42,30 +44,26 @@ export default class AuthenticationController {
   }
 
   async forgotPasswordAction({ request, response }: HttpContext) {
-    // const resend = new Resend('resend')
-    const email = request.only(['email']).email
+    const data = await request.validateUsing(forgotPasswordValidator)
+    const user = await User.findBy('email', data.email)
 
-    const userByEmail = await User.query().where('email', email).first()
-
-    if (userByEmail) {
-      const resetEmailUrl = router
+    if (user) {
+      const signedUrl = router
         .builder()
-        .prefixUrl('http://localhost:3333')
-        .params({ uid: userByEmail.uid })
+        .prefixUrl(env.get('APP_BASE_URL'))
+        .params({ uid: user.uid })
         .makeSigned('resetPassword', {
           expiresIn: '1 hour',
         })
 
       await mail.send((message) => {
         message
-          .to(email)
-          .from('alexbrgn.code@leadcode.fr')
-          .subject('Testing email form Adonis')
-          .text(resetEmailUrl)
+          .to(data.email)
+          .from(env.get('SMTP_EMAIL'))
+          .subject('Testing email from Adonis')
+          .text(signedUrl)
       })
       return response.redirect().toRoute('home')
-    } else {
-      return response.response.statusCode === 404
     }
   }
 
@@ -78,18 +76,11 @@ export default class AuthenticationController {
     return inertia.render('manager/authentication/reset_password_page', { user })
   }
 
-  async resetPasswordAction({ request, params }: HttpContext) {
-    if (request.input('password') === request.input('password_confirmation')) {
-      const data = await request.validateUsing(resetPasswordValidator)
-      const user = await User.findBy('uid', params.uid)
+  async resetPasswordAction({ request, response, params }: HttpContext) {
+    const data = await request.validateUsing(resetPasswordValidator)
+    const user = await User.findByOrFail('uid', params.uid)
 
-      if (user) {
-        user.merge(data)
-        await user.save()
-        return { message: 'Changement de mot de passe effectué' }
-      } else {
-        console.log(user)
-      }
-    }
+    await user.merge(data).save()
+    return response.redirect().toRoute('home')
   }
 }
